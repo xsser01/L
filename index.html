@@ -1,1846 +1,1253 @@
 <!DOCTYPE html>
-<html lang="ar" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminal OS v3.0 - Advanced Console System</title>
+    <title>شات الذكاء الاصطناعي المتقدم</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ===== RESET & VARIABLES ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         :root {
-            --bg-primary: #0a0e14;
-            --bg-secondary: #0d1117;
-            --bg-tertiary: #161b22;
-            --bg-accent: #1c2128;
-            --text-primary: #c9d1d9;
-            --text-secondary: #8b949e;
-            --text-accent: #58a6ff;
-            --text-success: #3fb950;
-            --text-warning: #d29922;
-            --text-danger: #f85149;
-            --text-muted: #484f58;
-            --border-color: #30363d;
-            --glow-blue: rgba(56, 139, 253, 0.4);
-            --glow-green: rgba(63, 185, 80, 0.4);
-            --glow-red: rgba(248, 81, 73, 0.4);
-            --shadow-heavy: 0 10px 40px rgba(0, 0, 0, 0.5);
-            --shadow-light: 0 5px 20px rgba(0, 0, 0, 0.3);
+            --primary-color: #10a37f;
+            --primary-dark: #0d8c6d;
+            --secondary-color: #343541;
+            --chat-bg: #444654;
+            --user-bg: #343541;
+            --text-color: #ececf1;
+            --border-color: #565869;
+            --sidebar-bg: #202123;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
         }
 
         body {
-            background: linear-gradient(135deg, #0a0e14 0%, #0d1117 50%, #161b22 100%);
-            color: var(--text-primary);
-            min-height: 100vh;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            height: 100vh;
             overflow: hidden;
-            line-height: 1.6;
         }
 
-        /* ===== TERMINAL CONTAINER ===== */
-        .terminal-container {
-            width: 100vw;
+        .app-container {
+            display: flex;
             height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
             display: flex;
             flex-direction: column;
-            background: var(--bg-primary);
-            position: relative;
-            overflow: hidden;
+            transition: var(--transition);
+            z-index: 10;
         }
 
-        /* ===== TERMINAL HEADER ===== */
-        .terminal-header {
-            background: linear-gradient(90deg, var(--bg-tertiary), var(--bg-accent));
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .sidebar-header {
+            padding: 16px;
             border-bottom: 1px solid var(--border-color);
-            box-shadow: var(--shadow-light);
-            user-select: none;
         }
 
-        .header-left {
+        .sidebar-header h2 {
+            font-size: 18px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
         }
 
-        .terminal-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(45deg, var(--text-accent), #1f6feb);
+        .sidebar-header h2 i {
+            color: var(--primary-color);
+        }
+
+        .new-chat-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px;
             border-radius: 6px;
+            margin-top: 15px;
+            width: 100%;
+            font-size: 14px;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            color: white;
-        }
-
-        .terminal-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .terminal-status {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .status-item {
-            display: flex;
-            align-items: center;
             gap: 8px;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+            transition: var(--transition);
         }
 
-        .status-dot {
+        .new-chat-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .conversations {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .conversation-item {
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .conversation-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .conversation-item.active {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .conversation-item i {
+            font-size: 14px;
+            color: #8e8ea0;
+        }
+
+        .conversation-title {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 14px;
+        }
+
+        .sidebar-footer {
+            padding: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .user-info:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .user-status {
+            font-size: 12px;
+            color: #8e8ea0;
+        }
+
+        .toggle-sidebar {
+            display: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--sidebar-bg);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 20;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Main Chat Area */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .chat-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--secondary-color);
+        }
+
+        .chat-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-action-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .chat-action-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .message {
+            display: flex;
+            gap: 20px;
+            max-width: 100%;
+            padding: 20px 0;
+        }
+
+        .message.user {
+            background-color: var(--user-bg);
+        }
+
+        .message.assistant {
+            background-color: var(--chat-bg);
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .user .avatar {
+            background-color: #5436da;
+        }
+
+        .assistant .avatar {
+            background-color: var(--primary-color);
+        }
+
+        .message-content {
+            flex: 1;
+            padding-top: 5px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .message-content p {
+            margin-bottom: 10px;
+        }
+
+        .message-content code {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .message-content pre {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .message-content ul, .message-content ol {
+            padding-right: 20px;
+            margin: 10px 0;
+        }
+
+        .message-content li {
+            margin-bottom: 5px;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 10px 0;
+        }
+
+        .typing-indicator span {
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: var(--text-success);
-            animation: pulse 2s infinite;
+            background-color: var(--text-color);
+            opacity: 0.6;
+            animation: typing 1.4s infinite ease-in-out;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% { transform: translateY(0); opacity: 0.6; }
+            40% { transform: translateY(-10px); opacity: 1; }
         }
 
-        .status-dot.warning {
-            background: var(--text-warning);
-        }
-
-        /* ===== TERMINAL BODY ===== */
-        .terminal-body {
-            flex: 1;
-            display: flex;
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* ===== SIDEBAR ===== */
-        .terminal-sidebar {
-            width: 280px;
-            background: var(--bg-secondary);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            padding: 20px 0;
-            overflow-y: auto;
-        }
-
-        .sidebar-section {
-            margin-bottom: 25px;
-            padding: 0 20px;
-        }
-
-        .section-title {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .system-info {
-            background: var(--bg-tertiary);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid var(--border-color);
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-        }
-
-        .info-label {
-            color: var(--text-secondary);
-        }
-
-        .info-value {
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-
-        .system-processes {
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .process-item {
-            background: var(--bg-tertiary);
-            padding: 10px 15px;
-            margin-bottom: 8px;
-            border-radius: 6px;
-            border-left: 3px solid var(--text-accent);
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .process-item:hover {
-            background: var(--bg-accent);
-            transform: translateX(5px);
-        }
-
-        .process-name {
-            color: var(--text-primary);
-            margin-bottom: 5px;
-        }
-
-        .process-status {
-            color: var(--text-success);
-            font-size: 0.8rem;
-        }
-
-        /* ===== MAIN TERMINAL AREA ===== */
-        .terminal-main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            background: var(--bg-primary);
-        }
-
-        /* ===== COMMAND HISTORY ===== */
-        .terminal-output {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            background: var(--bg-primary);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .command-line {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 5px;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .prompt {
-            color: var(--text-accent);
-            font-weight: bold;
-            min-width: 200px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .prompt-user {
-            color: var(--text-success);
-        }
-
-        .prompt-path {
-            color: var(--text-accent);
-        }
-
-        .prompt-symbol {
-            color: var(--text-primary);
-        }
-
-        .command-text {
-            color: var(--text-primary);
-            flex: 1;
-            word-break: break-word;
-        }
-
-        .command-output {
-            margin-left: 210px;
-            color: var(--text-secondary);
-            padding: 8px 0;
-            border-left: 2px solid var(--border-color);
-            padding-left: 15px;
-            margin-bottom: 15px;
-        }
-
-        .output-success {
-            border-left-color: var(--text-success);
-            color: var(--text-success);
-        }
-
-        .output-error {
-            border-left-color: var(--text-danger);
-            color: var(--text-danger);
-        }
-
-        .output-warning {
-            border-left-color: var(--text-warning);
-            color: var(--text-warning);
-        }
-
-        .output-info {
-            border-left-color: var(--text-accent);
-            color: var(--text-accent);
-        }
-
-        .terminal-input-area {
-            padding: 15px 20px;
-            background: var(--bg-secondary);
+        /* Input Area */
+        .input-container {
+            padding: 24px;
             border-top: 1px solid var(--border-color);
+        }
+
+        .input-wrapper {
+            position: relative;
             display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
-        .input-prompt {
-            color: var(--text-success);
-            font-weight: bold;
+        .chat-input {
+            width: 100%;
+            background-color: rgba(64, 65, 79, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 52px 16px 16px;
+            color: var(--text-color);
+            font-size: 16px;
+            resize: none;
+            min-height: 56px;
+            max-height: 200px;
+            line-height: 1.5;
+            transition: var(--transition);
         }
 
-        #commandInput {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text-primary);
-            font-size: 1rem;
+        .chat-input:focus {
             outline: none;
-            caret-color: var(--text-accent);
+            border-color: var(--primary-color);
+            background-color: rgba(64, 65, 79, 1);
         }
 
-        #commandInput::placeholder {
-            color: var(--text-muted);
-        }
-
-        /* ===== TERMINAL WINDOWS ===== */
-        .terminal-windows {
+        .send-btn {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-        }
-
-        .window {
-            position: absolute;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            box-shadow: var(--shadow-heavy);
-            min-width: 400px;
-            min-height: 300px;
-            pointer-events: all;
-            resize: both;
-            overflow: hidden;
-            display: none;
-        }
-
-        .window.active {
-            display: flex;
-            flex-direction: column;
-            animation: windowAppear 0.3s ease;
-        }
-
-        @keyframes windowAppear {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .window-header {
-            background: linear-gradient(90deg, var(--bg-tertiary), var(--bg-accent));
-            padding: 12px 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            cursor: move;
-        }
-
-        .window-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-        }
-
-        .window-controls {
-            display: flex;
-            gap: 8px;
-        }
-
-        .window-btn {
-            width: 30px;
-            height: 30px;
-            border-radius: 4px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
+            left: 12px;
+            bottom: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
+            transition: var(--transition);
         }
 
-        .window-btn:hover {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
+        .send-btn:hover {
+            background-color: var(--primary-dark);
         }
 
-        .window-btn.close:hover {
-            background: var(--text-danger);
-            color: white;
-            border-color: var(--text-danger);
+        .send-btn:disabled {
+            background-color: #6e6e80;
+            cursor: not-allowed;
         }
 
-        .window-content {
-            flex: 1;
-            padding: 15px;
-            overflow: auto;
-            background: var(--bg-primary);
-        }
-
-        /* ===== FILE EXPLORER ===== */
-        .file-explorer {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 15px;
-        }
-
-        .file-item {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .file-item:hover {
-            background: var(--bg-accent);
-            transform: translateY(-5px);
-            border-color: var(--text-accent);
-        }
-
-        .file-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: var(--text-accent);
-        }
-
-        .file-name {
-            font-size: 0.9rem;
-            word-break: break-word;
-        }
-
-        /* ===== CODE EDITOR ===== */
-        .code-editor {
-            background: var(--bg-primary);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .editor-header {
-            background: var(--bg-tertiary);
-            padding: 10px 15px;
+        .input-footer {
             display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid var(--border-color);
+            justify-content: center;
+            margin-top: 12px;
+            font-size: 12px;
+            color: #8e8ea0;
         }
 
-        .editor-tabs {
-            display: flex;
-            gap: 5px;
-        }
-
-        .editor-tab {
-            padding: 5px 15px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-bottom: none;
-            border-radius: 4px 4px 0 0;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .editor-tab.active {
-            background: var(--bg-primary);
-            color: var(--text-accent);
-            border-color: var(--text-accent);
-        }
-
-        #editorContent {
-            width: 100%;
-            height: 400px;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            border: none;
-            padding: 15px;
-            font-family: 'Consolas', monospace;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            resize: none;
-            outline: none;
-        }
-
-        /* ===== NETWORK MONITOR ===== */
-        .network-monitor {
+        /* Welcome Screen */
+        .welcome-screen {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            padding: 0 24px;
         }
 
-        .network-chart {
-            height: 150px;
-            background: var(--bg-tertiary);
+        .welcome-title {
+            font-size: 32px;
+            margin-bottom: 16px;
+            background: linear-gradient(90deg, var(--primary-color), #5436da);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .welcome-subtitle {
+            font-size: 18px;
+            color: #8e8ea0;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .capabilities {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 800px;
+            margin-bottom: 40px;
+        }
+
+        .capability {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            width: 240px;
+        }
+
+        .capability i {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+        }
+
+        .capability h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .capability p {
+            font-size: 14px;
+            color: #8e8ea0;
+        }
+
+        /* API Configuration Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .modal {
+            background-color: var(--secondary-color);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h3 {
+            font-size: 18px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 20px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(64, 65, 79, 0.8);
+            border: 1px solid var(--border-color);
             border-radius: 6px;
-            position: relative;
-            overflow: hidden;
+            color: var(--text-color);
+            font-size: 14px;
         }
 
-        .network-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
             gap: 10px;
         }
 
-        .stat-box {
-            background: var(--bg-tertiary);
-            padding: 15px;
+        .btn {
+            padding: 10px 20px;
             border-radius: 6px;
-            text-align: center;
-            border: 1px solid var(--border-color);
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
         }
 
-        .stat-value {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--text-accent);
-            margin-bottom: 5px;
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
         }
 
-        .stat-label {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
         }
 
-        /* ===== SYSTEM MONITOR ===== */
-        .system-monitor {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
         }
 
-        .monitor-charts {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.2);
         }
 
-        .chart-container {
-            background: var(--bg-tertiary);
-            padding: 15px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-        }
-
-        .chart-title {
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-        }
-
-        .chart-bar {
-            height: 20px;
-            background: var(--bg-secondary);
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .chart-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--text-success), var(--text-accent));
-            border-radius: 10px;
-            transition: width 1s ease;
-            position: relative;
-        }
-
-        .chart-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(255, 255, 255, 0.1) 50%, 
-                transparent 100%);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        /* ===== TERMINAL FOOTER ===== */
-        .terminal-footer {
-            background: var(--bg-tertiary);
-            padding: 8px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid var(--border-color);
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .footer-left, .footer-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .key-hint {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .key {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-family: monospace;
-        }
-
-        /* ===== TERMINAL EFFECTS ===== */
-        .scanlines {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(
-                to bottom,
-                transparent 50%,
-                rgba(0, 0, 0, 0.1) 50%
-            );
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 999;
-            opacity: 0.3;
-        }
-
-        .glow-effect {
-            position: absolute;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, 
-                transparent, 
-                var(--glow-blue), 
-                transparent);
-            bottom: 0;
-            animation: glowMove 3s infinite linear;
-        }
-
-        @keyframes glowMove {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 1024px) {
-            .terminal-sidebar {
-                width: 220px;
-            }
-            
-            .prompt {
-                min-width: 150px;
-            }
-            
-            .command-output {
-                margin-left: 160px;
-            }
-        }
-
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .terminal-sidebar {
-                display: none;
+            .sidebar {
+                position: fixed;
+                top: 0;
+                right: 0;
+                height: 100%;
+                transform: translateX(100%);
             }
             
-            .prompt {
-                min-width: 120px;
+            .sidebar.active {
+                transform: translateX(0);
             }
             
-            .command-output {
-                margin-left: 130px;
+            .toggle-sidebar {
+                display: flex;
             }
             
-            .window {
-                min-width: 300px;
-                min-height: 250px;
+            .capabilities {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .capability {
+                width: 100%;
+                max-width: 300px;
             }
         }
 
-        /* ===== CUSTOM SCROLLBAR ===== */
+        /* Scrollbar Styling */
         ::-webkit-scrollbar {
             width: 8px;
-            height: 8px;
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--bg-secondary);
-            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.1);
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-secondary);
-        }
-
-        /* ===== UTILITY CLASSES ===== */
-        .hidden {
-            display: none !important;
-        }
-
-        .blink {
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        .typewriter {
-            overflow: hidden;
-            border-right: 2px solid var(--text-accent);
-            white-space: nowrap;
-            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
-        }
-
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent; }
-            50% { border-color: var(--text-accent); }
+            background: rgba(255, 255, 255, 0.3);
         }
     </style>
 </head>
 <body>
-    <div class="terminal-container">
-        <!-- Scanlines Effect -->
-        <div class="scanlines"></div>
-        <div class="glow-effect"></div>
-
-        <!-- Terminal Header -->
-        <div class="terminal-header">
-            <div class="header-left">
-                <div class="terminal-icon">
-                    <i class="fas fa-terminal"></i>
-                </div>
-                <div class="terminal-title">
-                    <span class="prompt-user">root</span>@<span class="prompt-path">terminal-os</span>:~$
-                </div>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-robot"></i> الذكاء الاصطناعي</h2>
+                <button class="new-chat-btn" id="newChatBtn">
+                    <i class="fas fa-plus"></i> محادثة جديدة
+                </button>
             </div>
-            <div class="terminal-status">
-                <div class="status-item">
-                    <div class="status-dot"></div>
-                    <span>SYSTEM: ONLINE</span>
-                </div>
-                <div class="status-item">
-                    <div class="status-dot warning"></div>
-                    <span>NETWORK: SECURE</span>
-                </div>
-                <div class="status-item">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>ENCRYPTION: AES-256</span>
+            
+            <div class="conversations" id="conversationsList">
+                <!-- Conversations will be dynamically added here -->
+            </div>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">م</div>
+                    <div class="user-details">
+                        <div class="user-name">مستخدم</div>
+                        <div class="user-status">متصل</div>
+                    </div>
+                    <i class="fas fa-cog" id="settingsBtn"></i>
                 </div>
             </div>
         </div>
-
-        <!-- Terminal Body -->
-        <div class="terminal-body">
-            <!-- Sidebar -->
-            <div class="terminal-sidebar">
-                <div class="sidebar-section">
-                    <div class="system-info">
-                        <div class="info-row">
-                            <span class="info-label">OS Version:</span>
-                            <span class="info-value">TerminalOS 3.0</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Kernel:</span>
-                            <span class="info-value">5.15.0-78-generic</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Uptime:</span>
-                            <span class="info-value" id="uptime">7d 14h 22m</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Shell:</span>
-                            <span class="info-value">bash 5.1.16</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">CPU:</span>
-                            <span class="info-value">AMD Ryzen 9 5950X</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Memory:</span>
-                            <span class="info-value" id="memory">32GB DDR4</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sidebar-section">
-                    <div class="section-title">Active Processes</div>
-                    <div class="system-processes">
-                        <div class="process-item">
-                            <div class="process-name">sshd</div>
-                            <div class="process-status">RUNNING (PID: 1245)</div>
-                        </div>
-                        <div class="process-item">
-                            <div class="process-name">nginx</div>
-                            <div class="process-status">RUNNING (PID: 892)</div>
-                        </div>
-                        <div class="process-item">
-                            <div class="process-name">docker</div>
-                            <div class="process-status">RUNNING (PID: 567)</div>
-                        </div>
-                        <div class="process-item">
-                            <div class="process-name">node</div>
-                            <div class="process-status">RUNNING (PID: 2341)</div>
-                        </div>
-                        <div class="process-item">
-                            <div class="process-name">python3</div>
-                            <div class="process-status">RUNNING (PID: 1892)</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sidebar-section">
-                    <div class="section-title">Quick Commands</div>
-                    <div class="system-processes">
-                        <div class="process-item" onclick="executeQuickCommand('clear')">
-                            <div class="process-name">clear</div>
-                            <div class="process-status">Clear terminal</div>
-                        </div>
-                        <div class="process-item" onclick="executeQuickCommand('sysinfo')">
-                            <div class="process-name">sysinfo</div>
-                            <div class="process-status">System information</div>
-                        </div>
-                        <div class="process-item" onclick="executeQuickCommand('neofetch')">
-                            <div class="process-name">neofetch</div>
-                            <div class="process-status">Display system info</div>
-                        </div>
-                        <div class="process-item" onclick="executeQuickCommand('help')">
-                            <div class="process-name">help</div>
-                            <div class="process-status">Show help</div>
-                        </div>
-                        <div class="process-item" onclick="executeQuickCommand('matrix')">
-                            <div class="process-name">matrix</div>
-                            <div class="process-status">Enable matrix mode</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Main Terminal Area -->
-            <div class="terminal-main">
-                <!-- Command Output Area -->
-                <div class="terminal-output" id="terminalOutput">
-                    <!-- Initial welcome message -->
-                    <div class="command-line">
-                        <div class="prompt">
-                            <span class="prompt-user">root</span>@<span class="prompt-path">terminal-os</span>:<span class="prompt-symbol">$</span>
-                        </div>
-                        <div class="command-text typewriter">welcome --init --secure</div>
-                    </div>
-                    <div class="command-output output-info">
-                        ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     <br>
-                        ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     <br>
-                           ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     <br>
-                           ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║     <br>
-                           ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗<br>
-                           ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝<br><br>
-                        Terminal OS v3.0 - Advanced Console System<br>
-                        Type 'help' for available commands<br>
-                        Type 'matrix' for special mode<br>
-                        --------------------------------------------------<br>
-                        System Time: <span id="systemTime"></span><br>
-                        IP Address: 192.168.1.105<br>
-                        Connection: Secure (TLS 1.3)<br>
-                        Last Login: Today 14:22 from 192.168.1.100<br>
-                    </div>
-                </div>
-
-                <!-- Command Input Area -->
-                <div class="terminal-input-area">
-                    <div class="input-prompt">
-                        <span class="prompt-user">root</span>@<span class="prompt-path">terminal-os</span>:<span class="prompt-symbol">$</span>
-                    </div>
-                    <input type="text" id="commandInput" placeholder="Type command here... (try 'help')" autocomplete="off" autofocus>
-                </div>
-            </div>
-
-            <!-- Floating Windows -->
-            <div class="terminal-windows">
-                <!-- File Explorer Window -->
-                <div class="window" id="fileExplorerWindow" style="top: 100px; left: 350px; width: 500px; height: 400px;">
-                    <div class="window-header">
-                        <div class="window-title">
-                            <i class="fas fa-folder"></i>
-                            <span>File Explorer - /root</span>
-                        </div>
-                        <div class="window-controls">
-                            <button class="window-btn minimize" onclick="minimizeWindow('fileExplorerWindow')">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <button class="window-btn maximize" onclick="maximizeWindow('fileExplorerWindow')">
-                                <i class="fas fa-expand"></i>
-                            </button>
-                            <button class="window-btn close" onclick="closeWindow('fileExplorerWindow')">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="window-content">
-                        <div class="file-explorer">
-                            <div class="file-item" onclick="openFile('document.txt')">
-                                <div class="file-icon">
-                                    <i class="fas fa-file-alt"></i>
-                                </div>
-                                <div class="file-name">notes.txt</div>
-                            </div>
-                            <div class="file-item" onclick="openFile('script.sh')">
-                                <div class="file-icon">
-                                    <i class="fas fa-code"></i>
-                                </div>
-                                <div class="file-name">backup.sh</div>
-                            </div>
-                            <div class="file-item" onclick="openFile('config.json')">
-                                <div class="file-icon">
-                                    <i class="fas fa-cog"></i>
-                                </div>
-                                <div class="file-name">config.json</div>
-                            </div>
-                            <div class="file-item" onclick="openFile('database.db')">
-                                <div class="file-icon">
-                                    <i class="fas fa-database"></i>
-                                </div>
-                                <div class="file-name">data.db</div>
-                            </div>
-                            <div class="file-item" onclick="openFile('image.png')">
-                                <div class="file-icon">
-                                    <i class="fas fa-image"></i>
-                                </div>
-                                <div class="file-name">screenshot.png</div>
-                            </div>
-                            <div class="file-item" onclick="openFile('archive.zip')">
-                                <div class="file-icon">
-                                    <i class="fas fa-archive"></i>
-                                </div>
-                                <div class="file-name">backup.zip</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Code Editor Window -->
-                <div class="window" id="codeEditorWindow" style="top: 150px; left: 900px; width: 600px; height: 500px;">
-                    <div class="window-header">
-                        <div class="window-title">
-                            <i class="fas fa-code"></i>
-                            <span>Code Editor - script.js</span>
-                        </div>
-                        <div class="window-controls">
-                            <button class="window-btn minimize" onclick="minimizeWindow('codeEditorWindow')">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <button class="window-btn maximize" onclick="maximizeWindow('codeEditorWindow')">
-                                <i class="fas fa-expand"></i>
-                            </button>
-                            <button class="window-btn close" onclick="closeWindow('codeEditorWindow')">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="window-content">
-                        <div class="code-editor">
-                            <div class="editor-header">
-                                <div class="editor-tabs">
-                                    <div class="editor-tab active">script.js</div>
-                                    <div class="editor-tab">style.css</div>
-                                    <div class="editor-tab">index.html</div>
-                                </div>
-                                <div>
-                                    <button class="window-btn" onclick="saveFile()">
-                                        <i class="fas fa-save"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <textarea id="editorContent" spellcheck="false">
-// Terminal OS - Main System Script
-const Terminal = {
-    version: "3.0",
-    author: "System Administrator",
-    
-    init: function() {
-        console.log("Terminal OS Initializing...");
-        this.loadModules();
-        this.startServices();
-    },
-    
-    loadModules: function() {
-        const modules = [
-            'FileSystem',
-            'NetworkManager',
-            'SecurityLayer',
-            'ProcessManager'
-        ];
         
-        modules.forEach(module => {
-            console.log(`Loading module: ${module}`);
-        });
-    },
-    
-    startServices: function() {
-        setInterval(() => {
-            this.updateSystemStats();
-        }, 1000);
-    },
-    
-    updateSystemStats: function() {
-        // Update CPU, Memory, Network stats
-        const stats = this.getSystemStats();
-        displayStats(stats);
-    },
-    
-    getSystemStats: function() {
-        return {
-            cpu: Math.random() * 100,
-            memory: Math.random() * 100,
-            network: Math.random() * 1000
-        };
-    }
-};
-
-// Start the system
-Terminal.init();</textarea>
-                        </div>
-                    </div>
+        <!-- Main Chat Area -->
+        <div class="chat-container">
+            <button class="toggle-sidebar" id="toggleSidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="chat-header">
+                <div class="chat-title" id="currentChatTitle">شات الذكاء الاصطناعي</div>
+                <div class="chat-actions">
+                    <button class="chat-action-btn" id="clearChatBtn" title="مسح المحادثة">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                    <button class="chat-action-btn" id="toggleDarkMode" title="تبديل السمة">
+                        <i class="fas fa-moon"></i>
+                    </button>
                 </div>
-
-                <!-- System Monitor Window -->
-                <div class="window" id="systemMonitorWindow" style="top: 200px; left: 200px; width: 450px; height: 350px;">
-                    <div class="window-header">
-                        <div class="window-title">
-                            <i class="fas fa-chart-line"></i>
-                            <span>System Monitor</span>
+            </div>
+            
+            <div class="messages-container" id="messagesContainer">
+                <!-- Welcome Screen -->
+                <div class="welcome-screen" id="welcomeScreen">
+                    <h1 class="welcome-title">شات الذكاء الاصطناعي المتقدم</h1>
+                    <p class="welcome-subtitle">اطرح أي سؤال وسأحاول تقديم أفضل إجابة ممكنة. يمكنني المساعدة في البرمجة، الكتابة، التحليل، وغير ذلك.</p>
+                    
+                    <div class="capabilities">
+                        <div class="capability">
+                            <i class="fas fa-lightbulb"></i>
+                            <h3>أفكار إبداعية</h3>
+                            <p>يمكنني مساعدتك في توليد أفكار إبداعية لمشاريعك</p>
                         </div>
-                        <div class="window-controls">
-                            <button class="window-btn minimize" onclick="minimizeWindow('systemMonitorWindow')">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <button class="window-btn maximize" onclick="maximizeWindow('systemMonitorWindow')">
-                                <i class="fas fa-expand"></i>
-                            </button>
-                            <button class="window-btn close" onclick="closeWindow('systemMonitorWindow')">
-                                <i class="fas fa-times"></i>
-                            </button>
+                        <div class="capability">
+                            <i class="fas fa-code"></i>
+                            <h3>كتابة وتصحيح الشيفرات</h3>
+                            <p>أساعد في كتابة وتصحيح الشيفرات البرمجية بلغات متعددة</p>
                         </div>
-                    </div>
-                    <div class="window-content">
-                        <div class="system-monitor">
-                            <div class="monitor-charts">
-                                <div class="chart-container">
-                                    <div class="chart-title">CPU Usage</div>
-                                    <div class="chart-bar">
-                                        <div class="chart-fill" id="cpuUsage" style="width: 45%"></div>
-                                    </div>
-                                    <div class="stat-value" id="cpuPercent">45%</div>
-                                </div>
-                                <div class="chart-container">
-                                    <div class="chart-title">Memory Usage</div>
-                                    <div class="chart-bar">
-                                        <div class="chart-fill" id="memoryUsage" style="width: 68%"></div>
-                                    </div>
-                                    <div class="stat-value" id="memoryPercent">68%</div>
-                                </div>
-                            </div>
-                            <div class="network-monitor">
-                                <div class="chart-title">Network Activity</div>
-                                <div class="network-stats">
-                                    <div class="stat-box">
-                                        <div class="stat-value" id="networkUp">125</div>
-                                        <div class="stat-label">KB/s UP</div>
-                                    </div>
-                                    <div class="stat-box">
-                                        <div class="stat-value" id="networkDown">842</div>
-                                        <div class="stat-label">KB/s DOWN</div>
-                                    </div>
-                                    <div class="stat-box">
-                                        <div class="stat-value" id="connections">24</div>
-                                        <div class="stat-label">CONNECTIONS</div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="capability">
+                            <i class="fas fa-book"></i>
+                            <h3>شرح المفاهيم</h3>
+                            <p>أشرح المفاهيم المعقدة بطريقة مبسطة وسهلة الفهم</p>
+                        </div>
+                        <div class="capability">
+                            <i class="fas fa-language"></i>
+                            <h3>ترجمة وتحليل النصوص</h3>
+                            <p>أترجم النصوص بين اللغات وأحلل المحتوى المكتوب</p>
                         </div>
                     </div>
+                    
+                    <p class="input-footer">ابدأ بالكتابة في المربع أدناه لبدء المحادثة</p>
+                </div>
+                
+                <!-- Messages will be dynamically added here -->
+            </div>
+            
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <textarea 
+                        class="chat-input" 
+                        id="chatInput" 
+                        placeholder="اكتب رسالتك هنا... (اضغط Enter للإرسال، Shift+Enter للسطر الجديد)"
+                        rows="1"
+                    ></textarea>
+                    <button class="send-btn" id="sendBtn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="input-footer">
+                    <span>شات الذكاء الاصطناعي يمكن أن يخطئ في بعض المعلومات. تأكد من التحقق من المعلومات المهمة.</span>
                 </div>
             </div>
         </div>
-
-        <!-- Terminal Footer -->
-        <div class="terminal-footer">
-            <div class="footer-left">
-                <div class="key-hint">
-                    <span class="key">F1</span>
-                    <span>Help</span>
+    </div>
+    
+    <!-- API Configuration Modal -->
+    <div class="modal-overlay" id="apiConfigModal" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>إعدادات API</h3>
+                <button class="close-modal" id="closeModalBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="apiKey">مفتاح API</label>
+                    <input 
+                        type="password" 
+                        id="apiKey" 
+                        placeholder="أدخل مفتاح API الخاص بك"
+                        value=""
+                    >
                 </div>
-                <div class="key-hint">
-                    <span class="key">F2</span>
-                    <span>New Terminal</span>
+                <div class="form-group">
+                    <label for="apiProvider">مزود API</label>
+                    <select id="apiProvider">
+                        <option value="openai">OpenAI</option>
+                        <option value="custom">مخصص (Custom Endpoint)</option>
+                    </select>
                 </div>
-                <div class="key-hint">
-                    <span class="key">F3</span>
-                    <span>File Explorer</span>
+                <div class="form-group" id="customEndpointGroup" style="display: none;">
+                    <label for="customEndpoint">رابط API المخصص</label>
+                    <input 
+                        type="text" 
+                        id="customEndpoint" 
+                        placeholder="https://api.example.com/v1/chat/completions"
+                        value=""
+                    >
                 </div>
-                <div class="key-hint">
-                    <span class="key">F4</span>
-                    <span>System Monitor</span>
+                <div class="form-group">
+                    <label for="model">النموذج</label>
+                    <select id="model">
+                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                        <option value="gpt-4">GPT-4</option>
+                        <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                    </select>
                 </div>
-                <div class="key-hint">
-                    <span class="key">F5</span>
-                    <span>Refresh</span>
+                <div class="form-group">
+                    <label for="temperature">درجة الإبداع (Temperature)</label>
+                    <input 
+                        type="range" 
+                        id="temperature" 
+                        min="0" 
+                        max="1" 
+                        step="0.1" 
+                        value="0.7"
+                    >
+                    <span id="temperatureValue">0.7</span>
                 </div>
             </div>
-            <div class="footer-right">
-                <span id="currentTime">14:30:45</span>
-                <span>|</span>
-                <span id="currentDate">2024-03-15</span>
-                <span>|</span>
-                <span>Connection: <span class="blink">●</span> Secure</span>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelBtn">إلغاء</button>
+                <button class="btn btn-primary" id="saveApiBtn">حفظ الإعدادات</button>
             </div>
         </div>
     </div>
 
     <script>
-        // ===== GLOBAL VARIABLES =====
-        let commandHistory = [];
-        let historyIndex = -1;
-        let currentPath = '~';
-        let matrixMode = false;
-        let isDragging = false;
-        let dragElement = null;
-        let offsetX, offsetY;
+        // DOM Elements
+        const sidebar = document.getElementById('sidebar');
+        const toggleSidebarBtn = document.getElementById('toggleSidebar');
+        const newChatBtn = document.getElementById('newChatBtn');
+        const conversationsList = document.getElementById('conversationsList');
+        const messagesContainer = document.getElementById('messagesContainer');
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const clearChatBtn = document.getElementById('clearChatBtn');
+        const settingsBtn = document.getElementById('settingsBtn');
+        const apiConfigModal = document.getElementById('apiConfigModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const saveApiBtn = document.getElementById('saveApiBtn');
+        const apiProviderSelect = document.getElementById('apiProvider');
+        const customEndpointGroup = document.getElementById('customEndpointGroup');
+        const temperatureSlider = document.getElementById('temperature');
+        const temperatureValue = document.getElementById('temperatureValue');
+        const currentChatTitle = document.getElementById('currentChatTitle');
 
-        // ===== SYSTEM COMMANDS DATABASE =====
-        const commands = {
-            'help': {
-                description: 'Display all available commands',
-                execute: () => `
-Available Commands:
-══════════════════════════════════════════════════════════════════════════════
-  clear          Clear terminal screen
-  ls             List directory contents
-  cd [dir]       Change directory
-  pwd            Print working directory
-  cat [file]     Display file contents
-  echo [text]    Display a line of text
-  date           Display current date and time
-  whoami         Display current user
-  neofetch       Display system information
-  sysinfo        Detailed system information
-  matrix         Enter matrix mode (special effect)
-  calc [expr]    Calculator
-  ping [host]    Ping a network host
-  traceroute [host] Trace route to host
-  ifconfig       Network interface configuration
-  top            Display system processes
-  ps             Display current processes
-  kill [pid]     Kill a process
-  mkdir [name]   Create directory
-  touch [file]   Create empty file
-  rm [file]      Remove file
-  cp [src] [dst] Copy file
-  mv [src] [dst] Move file
-  find [name]    Find files
-  grep [pattern] Search text using patterns
-  ssh [host]     Connect to remote host
-  scp [file] [host] Secure copy file
-  encrypt [file] Encrypt a file
-  decrypt [file] Decrypt a file
-  firewall       Configure firewall
-  history        Show command history
-  reboot         Reboot system
-  shutdown       Shutdown system
-  help           Display this help message
-
-Type 'help [command]' for more information on a specific command.
-                `
-            },
-
-            'clear': {
-                description: 'Clear the terminal screen',
-                execute: () => {
-                    document.getElementById('terminalOutput').innerHTML = '';
-                    return 'Terminal cleared.';
-                }
-            },
-
-            'ls': {
-                description: 'List directory contents',
-                execute: () => `
-drwxr-xr-x  6 root root  4096 Mar 15 14:22 .
-drwxr-xr-x  3 root root  4096 Mar 10 09:15 ..
--rw-r--r--  1 root root   128 Mar 15 10:30 notes.txt
--rwxr-xr-x  1 root root  1024 Mar 14 22:15 backup.sh
-drwxr-xr-x  2 root root  4096 Mar 13 11:45 documents
-drwxr-xr-x  4 root root  4096 Mar 12 16:20 projects
--rw-r--r--  1 root root  2048 Mar 11 09:30 config.json
-drwxr-xr-x  3 root root  4096 Mar 10 14:55 downloads
--rw-r--r--  1 root root 51200 Mar  9 18:40 data.db
--rw-r--r--  1 root root 10240 Mar  8 12:25 screenshot.png
-                `
-            },
-
-            'pwd': {
-                description: 'Print working directory',
-                execute: () => `/home/root/${currentPath}`
-            },
-
-            'date': {
-                description: 'Display current date and time',
-                execute: () => {
-                    const now = new Date();
-                    return now.toLocaleString('en-US', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                        timeZoneName: 'short'
-                    });
-                }
-            },
-
-            'whoami': {
-                description: 'Display current user',
-                execute: () => 'root'
-            },
-
-            'neofetch': {
-                description: 'Display system information',
-                execute: () => `
-                    ╭──────────────────────────────────────────────────────────────╮
-                    │                                                              │
-                    │   ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗  │
-                    │   ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗ │
-                    │      ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║ │
-                    │      ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║ │
-                    │      ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║ │
-                    │      ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝ │
-                    │                                                              │
-                    ╰──────────────────────────────────────────────────────────────╯
-                    
-                    OS: Terminal OS 3.0 x86_64
-                    Host: Terminal System
-                    Kernel: 5.15.0-78-generic
-                    Uptime: 7 days, 14 hours, 22 minutes
-                    Shell: bash 5.1.16
-                    CPU: AMD Ryzen 9 5950X (32) @ 3.4GHz
-                    Memory: 12.8GiB / 31.4GiB
-                    Disk: 128GB / 512GB (25%)
-                    Terminal: Web Terminal v3.0
-                    Theme: Dark Matrix
-                    Icons: Enabled
-                `
-            },
-
-            'sysinfo': {
-                description: 'Detailed system information',
-                execute: () => `
-System Information Report:
-══════════════════════════════════════════════════════════════════════════════
-System:
-  Host: terminal-os Kernel: 5.15.0-78-generic x86_64 bits: 64
-  Console: tty 1 Distro: Terminal OS 3.0
-  Uptime: 7 days, 14 hours, 22 minutes
-
-CPU:
-  Model: AMD Ryzen 9 5950X (32) @ 3.400GHz
-  Topology: 16 Core, 32 Thread
-  Usage: 45% (Average)
-
-Memory:
-  Total: 31.4 GiB
-  Used: 12.8 GiB (40.8%)
-  Free: 18.6 GiB
-
-Disk:
-  Total: 512 GB
-  Used: 128 GB (25%)
-  Free: 384 GB
-
-Network:
-  Interface: eth0
-  IP: 192.168.1.105
-  Gateway: 192.168.1.1
-  DNS: 8.8.8.8, 8.8.4.4
-
-Security:
-  Firewall: Active
-  Encryption: AES-256
-  Last Scan: Today 02:00
-  Threats: 0
-
-Services:
-  SSH: Running (Port 22)
-  Web: Running (Port 80, 443)
-  Database: Running (Port 3306)
-  Docker: Running
-                `
-            },
-
-            'matrix': {
-                description: 'Enter matrix mode (special effect)',
-                execute: () => {
-                    matrixMode = !matrixMode;
-                    if (matrixMode) {
-                        startMatrixEffect();
-                        return 'Entering matrix mode... Code is flowing...';
-                    } else {
-                        stopMatrixEffect();
-                        return 'Exiting matrix mode.';
-                    }
-                }
-            },
-
-            'calc': {
-                description: 'Calculator - evaluate mathematical expression',
-                execute: (args) => {
-                    if (!args) return 'Usage: calc [expression]';
-                    try {
-                        // Safe evaluation
-                        const result = Function('"use strict"; return (' + args + ')')();
-                        return `Result: ${result}`;
-                    } catch (error) {
-                        return `Error: Invalid expression - ${error.message}`;
-                    }
-                }
-            },
-
-            'ping': {
-                description: 'Ping a network host',
-                execute: (args) => {
-                    if (!args) return 'Usage: ping [host]';
-                    return `
-PING ${args} (93.184.216.34) 56(84) bytes of data.
-64 bytes from 93.184.216.34: icmp_seq=1 ttl=57 time=25.4 ms
-64 bytes from 93.184.216.34: icmp_seq=2 ttl=57 time=24.8 ms
-64 bytes from 93.184.216.34: icmp_seq=3 ttl=57 time=26.1 ms
-64 bytes from 93.184.216.34: icmp_seq=4 ttl=57 time=25.9 ms
-
---- ${args} ping statistics ---
-4 packets transmitted, 4 received, 0% packet loss, time 3005ms
-rtt min/avg/max/mdev = 24.832/25.550/26.143/0.527 ms
-                    `;
-                }
-            },
-
-            'ifconfig': {
-                description: 'Network interface configuration',
-                execute: () => `
-eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 192.168.1.105  netmask 255.255.255.0  broadcast 192.168.1.255
-        inet6 fe80::20c:29ff:fe17:5c2a  prefixlen 64  scopeid 0x20<link>
-        ether 00:0c:29:17:5c:2a  txqueuelen 1000  (Ethernet)
-        RX packets 1254892  bytes 1684589232 (1.5 GiB)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 892345  bytes 125893456 (120.1 MiB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-
-lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
-        inet 127.0.0.1  netmask 255.0.0.0
-        inet6 ::1  prefixlen 128  scopeid 0x10<host>
-        loop  txqueuelen 1000  (Local Loopback)
-        RX packets 24567  bytes 2567894 (2.4 MiB)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 24567  bytes 2567894 (2.4 MiB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-                `
-            },
-
-            'top': {
-                description: 'Display system processes',
-                execute: () => `
-top - 14:30:45 up 7 days, 14:22,  1 user,  load average: 0.45, 0.38, 0.42
-Tasks: 245 total,   1 running, 244 sleeping,   0 stopped,   0 zombie
-%Cpu(s):  4.5 us,  1.2 sy,  0.0 ni, 94.1 id,  0.1 wa,  0.0 hi,  0.1 si,  0.0 st
-MiB Mem :  32176.4 total,  13107.2 free,   8544.8 used,  10524.4 buff/cache
-MiB Swap:   2048.0 total,   2048.0 free,      0.0 used.  22845.6 avail Mem
-
-    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
-   1245 root      20   0  245688  45232  18904 S   4.7   0.1   7:45.32 sshd
-    892 root      20   0  125688  21568   8456 S   2.3   0.1  15:22.18 nginx
-    567 root      20   0 1256784 245688  45232 S   1.8   0.8  45:12.34 docker
-   2341 root      20   0  856788 125688  21568 S   1.2   0.4  12:34.56 node
-   1892 root      20   0  125688   8456   2156 S   0.8   0.0   5:12.34 python3
-                `
-            },
-
-            'history': {
-                description: 'Show command history',
-                execute: () => {
-                    if (commandHistory.length === 0) return 'No command history.';
-                    return commandHistory.map((cmd, index) => `${index + 1}  ${cmd}`).join('\n');
-                }
-            },
-
-            'reboot': {
-                description: 'Reboot system',
-                execute: () => {
-                    setTimeout(() => {
-                        document.getElementById('terminalOutput').innerHTML = '';
-                        addOutput('System rebooting...', 'info');
-                        setTimeout(() => {
-                            addOutput('System rebooted successfully.', 'success');
-                            executeCommand('neofetch');
-                        }, 1000);
-                    }, 500);
-                    return 'Initiating system reboot...';
-                }
-            },
-
-            'shutdown': {
-                description: 'Shutdown system',
-                execute: () => {
-                    setTimeout(() => {
-                        document.body.innerHTML = `
-                            <div style="
-                                background: #0a0e14;
-                                color: #58a6ff;
-                                height: 100vh;
-                                display: flex;
-                                flex-direction: column;
-                                justify-content: center;
-                                align-items: center;
-                                font-family: monospace;
-                                text-align: center;
-                            ">
-                                <div style="font-size: 3rem; margin-bottom: 2rem;">
-                                    ⚡ Terminal OS ⚡
-                                </div>
-                                <div style="font-size: 1.5rem; margin-bottom: 1rem;">
-                                    System shutdown complete
-                                </div>
-                                <div style="color: #8b949e;">
-                                    It's now safe to turn off your terminal
-                                </div>
-                                <div style="margin-top: 3rem; color: #3fb950;">
-                                    Press F5 to restart
-                                </div>
-                            </div>
-                        `;
-                    }, 1000);
-                    return 'Shutting down system...';
-                }
-            },
-
-            'firewall': {
-                description: 'Configure firewall',
-                execute: () => `
-Firewall Status: ACTIVE
-══════════════════════════════════════════════════════════════════════════════
-Rules:
-  Chain INPUT (policy DROP)
-  num  target     prot opt source               destination
-  1    ACCEPT     all  --  anywhere             anywhere
-  2    ACCEPT     icmp --  anywhere             anywhere
-  3    ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:ssh
-  4    ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:http
-  5    ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:https
-  6    DROP       all  --  anywhere             anywhere
-
-  Chain FORWARD (policy DROP)
-  num  target     prot opt source               destination
-
-  Chain OUTPUT (policy ACCEPT)
-  num  target     prot opt source               destination
-
-Active Connections: 24
-Blocked Attempts: 128
-Last Attack: 2 hours ago
-                `
-            },
-
-            'encrypt': {
-                description: 'Encrypt a file',
-                execute: (args) => {
-                    if (!args) return 'Usage: encrypt [filename]';
-                    return `File '${args}' encrypted successfully with AES-256.\nKey ID: 0x${Math.random().toString(16).substr(2, 8).toUpperCase()}`;
-                }
-            },
-
-            'decrypt': {
-                description: 'Decrypt a file',
-                execute: (args) => {
-                    if (!args) return 'Usage: decrypt [filename]';
-                    return `File '${args}' decrypted successfully.`;
-                }
-            }
+        // State variables
+        let conversations = JSON.parse(localStorage.getItem('ai-chat-conversations')) || [];
+        let currentConversationId = null;
+        let isWaitingForResponse = false;
+        let apiSettings = JSON.parse(localStorage.getItem('ai-chat-api-settings')) || {
+            apiKey: '',
+            apiProvider: 'openai',
+            customEndpoint: '',
+            model: 'gpt-3.5-turbo',
+            temperature: 0.7
         };
 
-        // ===== CORE FUNCTIONS =====
-        function executeCommand(input) {
-            const terminalOutput = document.getElementById('terminalOutput');
-            const commandInput = document.getElementById('commandInput');
+        // Initialize the app
+        function init() {
+            // Load API settings
+            loadApiSettings();
             
-            // Add command to history
-            if (input.trim()) {
-                commandHistory.push(input);
-                historyIndex = commandHistory.length;
+            // Load conversations
+            loadConversations();
+            
+            // If there are conversations, show the last one
+            if (conversations.length > 0) {
+                switchToConversation(conversations[conversations.length - 1].id);
             }
             
-            // Display command
-            addCommandLine(input);
+            // Setup event listeners
+            setupEventListeners();
             
-            // Parse command
-            const [cmd, ...args] = input.trim().split(' ');
-            const command = cmd.toLowerCase();
-            const argument = args.join(' ');
-            
-            // Execute command
-            let output = '';
-            if (commands[command]) {
-                try {
-                    output = typeof commands[command].execute === 'function' 
-                        ? commands[command].execute(argument)
-                        : commands[command].execute;
-                } catch (error) {
-                    output = `Error executing command: ${error.message}`;
-                }
-            } else if (command) {
-                output = `Command not found: ${command}\nType 'help' for available commands.`;
-            }
-            
-            // Display output
-            if (output) {
-                addOutput(output, command === 'clear' ? 'clear' : 'info');
-            }
-            
-            // Clear input and scroll to bottom
-            commandInput.value = '';
-            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+            // Auto-resize textarea
+            setupTextareaAutoResize();
         }
 
-        function addCommandLine(command) {
-            const terminalOutput = document.getElementById('terminalOutput');
-            const commandLine = document.createElement('div');
-            commandLine.className = 'command-line';
-            commandLine.innerHTML = `
-                <div class="prompt">
-                    <span class="prompt-user">root</span>@<span class="prompt-path">terminal-os</span>:<span class="prompt-symbol">$</span>
-                </div>
-                <div class="command-text">${escapeHtml(command)}</div>
-            `;
-            terminalOutput.appendChild(commandLine);
-        }
-
-        function addOutput(text, type = 'info') {
-            if (type === 'clear') return;
-            
-            const terminalOutput = document.getElementById('terminalOutput');
-            const output = document.createElement('div');
-            output.className = `command-output output-${type}`;
-            output.innerHTML = formatOutput(text);
-            terminalOutput.appendChild(output);
-        }
-
-        function formatOutput(text) {
-            return text
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/\n/g, '<br>')
-                .replace(/ /g, '&nbsp;')
-                .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // ===== WINDOW MANAGEMENT =====
-        function openWindow(windowId) {
-            const window = document.getElementById(windowId);
-            window.classList.add('active');
-            
-            // Bring to front
-            document.querySelectorAll('.window').forEach(w => {
-                w.style.zIndex = '100';
+        // Setup event listeners
+        function setupEventListeners() {
+            // Toggle sidebar on mobile
+            toggleSidebarBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
             });
-            window.style.zIndex = '101';
+
+            // New chat button
+            newChatBtn.addEventListener('click', createNewConversation);
+
+            // Send message on button click
+            sendBtn.addEventListener('click', sendMessage);
+
+            // Send message on Enter key (without Shift)
+            chatInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            // Clear chat button
+            clearChatBtn.addEventListener('click', () => {
+                if (currentConversationId && confirm('هل أنت متأكد من رغبتك في مسح هذه المحادثة؟')) {
+                    clearCurrentConversation();
+                }
+            });
+
+            // Settings button
+            settingsBtn.addEventListener('click', () => {
+                apiConfigModal.style.display = 'flex';
+            });
+
+            // Close modal buttons
+            closeModalBtn.addEventListener('click', () => {
+                apiConfigModal.style.display = 'none';
+            });
+
+            cancelBtn.addEventListener('click', () => {
+                apiConfigModal.style.display = 'none';
+            });
+
+            // Save API settings
+            saveApiBtn.addEventListener('click', saveApiSettings);
+
+            // API provider change
+            apiProviderSelect.addEventListener('change', () => {
+                if (apiProviderSelect.value === 'custom') {
+                    customEndpointGroup.style.display = 'block';
+                } else {
+                    customEndpointGroup.style.display = 'none';
+                }
+            });
+
+            // Temperature slider
+            temperatureSlider.addEventListener('input', () => {
+                temperatureValue.textContent = temperatureSlider.value;
+            });
+
+            // Close modal when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target === apiConfigModal) {
+                    apiConfigModal.style.display = 'none';
+                }
+            });
+        }
+
+        // Setup textarea auto-resize
+        function setupTextareaAutoResize() {
+            chatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+        }
+
+        // Load API settings into the form
+        function loadApiSettings() {
+            document.getElementById('apiKey').value = apiSettings.apiKey || '';
+            document.getElementById('apiProvider').value = apiSettings.apiProvider || 'openai';
+            document.getElementById('customEndpoint').value = apiSettings.customEndpoint || '';
+            document.getElementById('model').value = apiSettings.model || 'gpt-3.5-turbo';
+            document.getElementById('temperature').value = apiSettings.temperature || 0.7;
+            document.getElementById('temperatureValue').textContent = apiSettings.temperature || 0.7;
             
-            // Make draggable
-            makeDraggable(windowId);
+            if (apiSettings.apiProvider === 'custom') {
+                customEndpointGroup.style.display = 'block';
+            }
         }
 
-        function closeWindow(windowId) {
-            document.getElementById(windowId).classList.remove('active');
+        // Save API settings
+        function saveApiSettings() {
+            apiSettings = {
+                apiKey: document.getElementById('apiKey').value,
+                apiProvider: document.getElementById('apiProvider').value,
+                customEndpoint: document.getElementById('customEndpoint').value,
+                model: document.getElementById('model').value,
+                temperature: parseFloat(document.getElementById('temperature').value)
+            };
+            
+            localStorage.setItem('ai-chat-api-settings', JSON.stringify(apiSettings));
+            apiConfigModal.style.display = 'none';
+            
+            alert('تم حفظ إعدادات API بنجاح');
         }
 
-        function minimizeWindow(windowId) {
-            const window = document.getElementById(windowId);
-            window.style.height = '40px';
-            window.querySelector('.window-content').style.display = 'none';
+        // Load conversations to sidebar
+        function loadConversations() {
+            conversationsList.innerHTML = '';
+            
+            conversations.forEach(conversation => {
+                const conversationElement = document.createElement('div');
+                conversationElement.className = `conversation-item ${conversation.id === currentConversationId ? 'active' : ''}`;
+                conversationElement.dataset.id = conversation.id;
+                
+                conversationElement.innerHTML = `
+                    <i class="fas fa-message"></i>
+                    <div class="conversation-title">${conversation.title}</div>
+                `;
+                
+                conversationElement.addEventListener('click', () => {
+                    switchToConversation(conversation.id);
+                    // Close sidebar on mobile
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.remove('active');
+                    }
+                });
+                
+                conversationsList.appendChild(conversationElement);
+            });
         }
 
-        function maximizeWindow(windowId) {
-            const window = document.getElementById(windowId);
-            if (window.style.width === '90vw' && window.style.height === '80vh') {
-                window.style.width = '';
-                window.style.height = '';
-                window.style.left = '';
-                window.style.top = '';
+        // Create a new conversation
+        function createNewConversation() {
+            const newConversation = {
+                id: Date.now().toString(),
+                title: `محادثة جديدة ${conversations.length + 1}`,
+                messages: [],
+                createdAt: new Date().toISOString()
+            };
+            
+            conversations.push(newConversation);
+            localStorage.setItem('ai-chat-conversations', JSON.stringify(conversations));
+            
+            loadConversations();
+            switchToConversation(newConversation.id);
+            
+            // Close sidebar on mobile
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+            }
+        }
+
+        // Switch to a conversation
+        function switchToConversation(conversationId) {
+            currentConversationId = conversationId;
+            const conversation = conversations.find(c => c.id === conversationId);
+            
+            if (!conversation) return;
+            
+            // Update UI
+            currentChatTitle.textContent = conversation.title;
+            
+            // Clear messages container
+            messagesContainer.innerHTML = '';
+            welcomeScreen.style.display = 'none';
+            
+            // Add messages
+            conversation.messages.forEach(message => {
+                addMessageToUI(message.role, message.content, message.id);
+            });
+            
+            // Update active conversation in sidebar
+            document.querySelectorAll('.conversation-item').forEach(item => {
+                if (item.dataset.id === conversationId) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+            
+            // Scroll to bottom
+            scrollToBottom();
+        }
+
+        // Clear current conversation
+        function clearCurrentConversation() {
+            const conversationIndex = conversations.findIndex(c => c.id === currentConversationId);
+            
+            if (conversationIndex !== -1) {
+                conversations[conversationIndex].messages = [];
+                localStorage.setItem('ai-chat-conversations', JSON.stringify(conversations));
+                
+                // Reload messages
+                switchToConversation(currentConversationId);
+            }
+        }
+
+        // Send message
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            
+            if (!message || isWaitingForResponse) return;
+            
+            // Clear input
+            chatInput.value = '';
+            chatInput.style.height = 'auto';
+            
+            // Add user message to UI
+            const userMessageId = Date.now().toString();
+            addMessageToUI('user', message, userMessageId);
+            
+            // Add to conversation
+            const conversation = conversations.find(c => c.id === currentConversationId);
+            if (conversation) {
+                conversation.messages.push({
+                    id: userMessageId,
+                    role: 'user',
+                    content: message
+                });
+                
+                // Update conversation title if it's the first message
+                if (conversation.messages.length === 1) {
+                    conversation.title = message.substring(0, 30) + (message.length > 30 ? '...' : '');
+                    currentChatTitle.textContent = conversation.title;
+                    loadConversations();
+                }
+                
+                localStorage.setItem('ai-chat-conversations', JSON.stringify(conversations));
             } else {
-                window.style.width = '90vw';
-                window.style.height = '80vh';
-                window.style.left = '5vw';
-                window.style.top = '10vh';
+                // Create a new conversation if none exists
+                createNewConversation();
+                await new Promise(resolve => setTimeout(resolve, 100));
+                sendMessage();
+                return;
             }
-            window.querySelector('.window-content').style.display = 'block';
-        }
-
-        function makeDraggable(windowId) {
-            const window = document.getElementById(windowId);
-            const header = window.querySelector('.window-header');
             
-            header.addEventListener('mousedown', startDrag);
+            // Show typing indicator
+            showTypingIndicator();
             
-            function startDrag(e) {
-                isDragging = true;
-                dragElement = window;
-                offsetX = e.clientX - window.offsetLeft;
-                offsetY = e.clientY - window.offsetTop;
+            // Get AI response
+            isWaitingForResponse = true;
+            sendBtn.disabled = true;
+            
+            try {
+                const aiResponse = await getAIResponse(message, conversation.messages);
                 
-                document.addEventListener('mousemove', drag);
-                document.addEventListener('mouseup', stopDrag);
+                // Remove typing indicator
+                removeTypingIndicator();
                 
-                // Bring to front
-                document.querySelectorAll('.window').forEach(w => {
-                    w.style.zIndex = '100';
+                // Add AI response to UI
+                const aiMessageId = Date.now().toString() + '-ai';
+                addMessageToUI('assistant', aiResponse, aiMessageId);
+                
+                // Add to conversation
+                conversation.messages.push({
+                    id: aiMessageId,
+                    role: 'assistant',
+                    content: aiResponse
                 });
-                window.style.zIndex = '101';
-            }
-            
-            function drag(e) {
-                if (!isDragging || !dragElement) return;
-                e.preventDefault();
                 
-                dragElement.style.left = (e.clientX - offsetX) + 'px';
-                dragElement.style.top = (e.clientY - offsetY) + 'px';
-            }
-            
-            function stopDrag() {
-                isDragging = false;
-                dragElement = null;
-                document.removeEventListener('mousemove', drag);
-                document.removeEventListener('mouseup', stopDrag);
-            }
-        }
-
-        // ===== SYSTEM FUNCTIONS =====
-        function updateSystemStats() {
-            // Update CPU
-            const cpuPercent = Math.floor(Math.random() * 30) + 40;
-            document.getElementById('cpuUsage').style.width = `${cpuPercent}%`;
-            document.getElementById('cpuPercent').textContent = `${cpuPercent}%`;
-            
-            // Update Memory
-            const memoryPercent = Math.floor(Math.random() * 20) + 60;
-            document.getElementById('memoryUsage').style.width = `${memoryPercent}%`;
-            document.getElementById('memoryPercent').textContent = `${memoryPercent}%`;
-            
-            // Update Network
-            document.getElementById('networkUp').textContent = Math.floor(Math.random() * 50) + 100;
-            document.getElementById('networkDown').textContent = Math.floor(Math.random() * 200) + 800;
-            document.getElementById('connections').textContent = Math.floor(Math.random() * 10) + 20;
-            
-            // Update Time
-            const now = new Date();
-            document.getElementById('currentTime').textContent = now.toLocaleTimeString();
-            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-CA');
-            document.getElementById('systemTime').textContent = now.toLocaleString();
-        }
-
-        function startMatrixEffect() {
-            const terminal = document.getElementById('terminalOutput');
-            terminal.classList.add('matrix-mode');
-            
-            const chars = '01';
-            const lines = [];
-            
-            for (let i = 0; i < 50; i++) {
-                const line = document.createElement('div');
-                line.className = 'matrix-line';
-                line.style.color = '#00ff00';
-                line.style.fontFamily = 'monospace';
-                line.style.whiteSpace = 'nowrap';
-                line.style.opacity = '0.8';
-                line.textContent = Array(100).fill(0).map(() => 
-                    chars[Math.floor(Math.random() * chars.length)]
-                ).join('');
-                terminal.appendChild(line);
-                lines.push(line);
-            }
-            
-            const interval = setInterval(() => {
-                if (!matrixMode) {
-                    clearInterval(interval);
-                    lines.forEach(line => line.remove());
-                    terminal.classList.remove('matrix-mode');
-                    return;
-                }
+                localStorage.setItem('ai-chat-conversations', JSON.stringify(conversations));
                 
-                lines.forEach(line => {
-                    const text = line.textContent;
-                    line.textContent = text.substring(1) + chars[Math.floor(Math.random() * chars.length)];
-                    line.style.opacity = Math.random() * 0.5 + 0.3;
-                });
-            }, 100);
-        }
-
-        function stopMatrixEffect() {
-            matrixMode = false;
-        }
-
-        function executeQuickCommand(command) {
-            document.getElementById('commandInput').value = command;
-            executeCommand(command);
-        }
-
-        function openFile(filename) {
-            addOutput(`Opening file: ${filename}`, 'info');
-            // Simulate file opening
-            setTimeout(() => {
-                addOutput(`File '${filename}' opened successfully.`, 'success');
-            }, 500);
-        }
-
-        function saveFile() {
-            const content = document.getElementById('editorContent').value;
-            addOutput('File saved successfully.', 'success');
-            console.log('File saved:', content.substring(0, 100) + '...');
-        }
-
-        // ===== EVENT LISTENERS =====
-        document.addEventListener('DOMContentLoaded', function() {
-            const commandInput = document.getElementById('commandInput');
+            } catch (error) {
+                // Remove typing indicator
+                removeTypingIndicator();
+                
+                // Show error message
+                const errorMessageId = Date.now().toString() + '-error';
+                addMessageToUI('assistant', `حدث خطأ: ${error.message}.\n\nتأكد من إعدادات API الخاصة بك.`, errorMessageId);
+            }
             
-            // Command input handler
-            commandInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    executeCommand(this.value);
-                } else if (e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    if (historyIndex > 0) {
-                        historyIndex--;
-                        this.value = commandHistory[historyIndex] || '';
-                    }
-                } else if (e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    if (historyIndex < commandHistory.length - 1) {
-                        historyIndex++;
-                        this.value = commandHistory[historyIndex] || '';
-                    } else {
-                        historyIndex = commandHistory.length;
-                        this.value = '';
-                    }
-                } else if (e.key === 'Tab') {
-                    e.preventDefault();
-                    // Basic tab completion
-                    const input = this.value;
-                    const matches = Object.keys(commands).filter(cmd => 
-                        cmd.startsWith(input.toLowerCase())
-                    );
-                    if (matches.length === 1) {
-                        this.value = matches[0];
-                    }
-                }
+            isWaitingForResponse = false;
+            sendBtn.disabled = false;
+            
+            // Scroll to bottom
+            scrollToBottom();
+        }
+
+        // Get AI response from API
+        async function getAIResponse(userMessage, conversationHistory) {
+            // Check if API key is set
+            if (!apiSettings.apiKey && apiSettings.apiProvider === 'openai') {
+                throw new Error('لم يتم تعيين مفتاح API. الرجاء إعداده من خلال إعدادات API.');
+            }
+            
+            // Prepare messages for API
+            const messages = conversationHistory
+                .slice(-10) // Limit context window
+                .map(msg => ({
+                    role: msg.role,
+                    content: msg.content
+                }));
+            
+            // Prepare request payload
+            const payload = {
+                model: apiSettings.model,
+                messages: messages,
+                temperature: apiSettings.temperature,
+                max_tokens: 1000
+            };
+            
+            // Determine API endpoint
+            let apiUrl = 'https://api.openai.com/v1/chat/completions';
+            let apiKey = apiSettings.apiKey;
+            
+            if (apiSettings.apiProvider === 'custom' && apiSettings.customEndpoint) {
+                apiUrl = apiSettings.customEndpoint;
+                // For custom endpoints, API key might not be needed or could be handled differently
+            }
+            
+            // Make API request
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify(payload)
             });
             
-            // Function keys
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'F1') {
-                    e.preventDefault();
-                    executeCommand('help');
-                } else if (e.key === 'F2') {
-                    e.preventDefault();
-                    addOutput('Opening new terminal session...', 'info');
-                } else if (e.key === 'F3') {
-                    e.preventDefault();
-                    openWindow('fileExplorerWindow');
-                } else if (e.key === 'F4') {
-                    e.preventDefault();
-                    openWindow('systemMonitorWindow');
-                } else if (e.key === 'F5') {
-                    e.preventDefault();
-                    location.reload();
+            if (!response.ok) {
+                if (response.status === 401) {
+                    throw new Error('مفتاح API غير صالح. الرجاء التحقق من المفتاح وإعادة المحاولة.');
+                } else if (response.status === 429) {
+                    throw new Error('تم تجاوز الحد المسموح به للطلبات. الرجاء المحاولة لاحقاً.');
+                } else {
+                    throw new Error(`خطأ في API: ${response.status}`);
                 }
+            }
+            
+            const data = await response.json();
+            
+            if (data.choices && data.choices.length > 0) {
+                return data.choices[0].message.content;
+            } else {
+                throw new Error('استجابة غير صالحة من API');
+            }
+        }
+
+        // Add message to UI
+        function addMessageToUI(role, content, messageId) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+            messageDiv.id = `message-${messageId}`;
+            
+            const avatar = role === 'user' 
+                ? '<i class="fas fa-user"></i>' 
+                : '<i class="fas fa-robot"></i>';
+            
+            // Format content with basic markdown-like styling
+            let formattedContent = content
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                .replace(/\n/g, '<br>');
+            
+            // Handle code blocks
+            formattedContent = formattedContent.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+                return `<pre><code>${code}</code></pre>`;
             });
             
-            // Initialize windows
-            makeDraggable('fileExplorerWindow');
-            makeDraggable('codeEditorWindow');
-            makeDraggable('systemMonitorWindow');
+            messageDiv.innerHTML = `
+                <div class="avatar">${avatar}</div>
+                <div class="message-content">${formattedContent}</div>
+            `;
             
-            // Open some windows by default
-            setTimeout(() => {
-                openWindow('systemMonitorWindow');
-            }, 1000);
+            messagesContainer.appendChild(messageDiv);
             
-            // Start system stats updates
-            setInterval(updateSystemStats, 2000);
+            // Hide welcome screen if visible
+            if (welcomeScreen.style.display !== 'none') {
+                welcomeScreen.style.display = 'none';
+            }
+        }
+
+        // Show typing indicator
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message assistant';
+            typingDiv.id = 'typing-indicator';
             
-            // Initial update
-            updateSystemStats();
+            typingDiv.innerHTML = `
+                <div class="avatar"><i class="fas fa-robot"></i></div>
+                <div class="message-content">
+                    <div class="typing-indicator">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            `;
             
-            // Auto-focus input
-            commandInput.focus();
-        });
+            messagesContainer.appendChild(typingDiv);
+            scrollToBottom();
+        }
+
+        // Remove typing indicator
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        // Scroll to bottom of messages
+        function scrollToBottom() {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>

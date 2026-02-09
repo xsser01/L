@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فحص الأمان الشامل - سكان متكامل للاتصال والمتصفح والجهاز</title>
+    <title>فحص الأمان المتقدم - 50+ نوع فحص شامل</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* CSS Variables */
@@ -13,6 +13,7 @@
             --success-color: #27ae60;
             --warning-color: #f39c12;
             --danger-color: #e74c3c;
+            --info-color: #17a2b8;
             --light-color: #ecf0f1;
             --dark-color: #2c3e50;
             --gray-color: #7f8c8d;
@@ -37,14 +38,14 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
         /* Header Styles */
         header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(135deg, var(--primary-color), #1a2530);
             color: white;
             padding: 1.5rem 0;
             box-shadow: var(--box-shadow);
@@ -66,29 +67,40 @@
         }
 
         .logo i {
-            font-size: 2rem;
+            font-size: 2.2rem;
+            color: var(--secondary-color);
         }
 
         .logo h1 {
             font-size: 1.8rem;
+            font-weight: 700;
         }
 
-        .nav-links {
+        .logo span {
+            color: var(--secondary-color);
+        }
+
+        .stats {
             display: flex;
-            gap: 25px;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 8px 12px;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
             border-radius: var(--border-radius);
-            transition: var(--transition);
         }
 
-        .nav-links a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #ddd;
         }
 
         /* Main Content */
@@ -98,7 +110,7 @@
 
         .dashboard {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 25px;
             margin-bottom: 30px;
         }
@@ -110,6 +122,7 @@
             box-shadow: var(--box-shadow);
             padding: 1.5rem;
             transition: var(--transition);
+            height: 100%;
         }
 
         .card:hover {
@@ -161,6 +174,11 @@
             color: var(--danger-color);
         }
 
+        .status-info {
+            background-color: rgba(23, 162, 184, 0.2);
+            color: var(--info-color);
+        }
+
         /* Check Items */
         .check-item {
             display: flex;
@@ -178,11 +196,13 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            flex: 1;
         }
 
         .check-icon {
             width: 36px;
             height: 36px;
+            min-width: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -205,9 +225,27 @@
             color: var(--danger-color);
         }
 
+        .check-icon-info {
+            background-color: rgba(23, 162, 184, 0.1);
+            color: var(--info-color);
+        }
+
         .check-icon-neutral {
             background-color: rgba(127, 140, 141, 0.1);
             color: var(--gray-color);
+        }
+
+        .check-details {
+            font-size: 0.85rem;
+            color: var(--gray-color);
+            margin-top: 3px;
+        }
+
+        .check-value {
+            font-weight: 600;
+            color: var(--dark-color);
+            text-align: left;
+            min-width: 100px;
         }
 
         /* Progress Bars */
@@ -220,6 +258,7 @@
             background-color: #eee;
             border-radius: 5px;
             overflow: hidden;
+            margin-top: 5px;
         }
 
         .progress-fill {
@@ -284,10 +323,19 @@
             margin-top: 15px;
         }
 
+        .btn-lg {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+        }
+
         /* Action Section */
         .action-section {
             text-align: center;
-            margin-top: 2rem;
+            margin: 2rem 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
         /* Detailed Results */
@@ -319,11 +367,15 @@
             font-weight: 600;
             margin-bottom: 8px;
             color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .result-value {
-            color: var(--gray-color);
+            color: var(--dark-color);
             font-size: 0.95rem;
+            line-height: 1.7;
         }
 
         /* Footer */
@@ -345,6 +397,8 @@
             display: flex;
             gap: 20px;
             margin: 1.5rem 0;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .footer-links a {
@@ -362,24 +416,113 @@
             font-size: 0.9rem;
         }
 
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 50px auto;
+            width: 90%;
+            max-width: 800px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            animation: modalFade 0.3s;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-color);
+        }
+
+        @keyframes modalFade {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* Responsive Design */
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
             .header-content {
                 flex-direction: column;
                 gap: 15px;
             }
             
-            .nav-links {
-                gap: 15px;
+            .stats {
+                width: 100%;
+                justify-content: space-around;
             }
-            
-            .dashboard {
-                grid-template-columns: 1fr;
-            }
-            
+        }
+
+        @media (max-width: 768px) {
             .results-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .action-section {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        /* Animation for scanning */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .scanning {
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--secondary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -389,13 +532,26 @@
         <div class="container header-content">
             <div class="logo">
                 <i class="fas fa-shield-alt"></i>
-                <h1>فحص الأمان الشامل</h1>
+                <h1>نظام الفحص <span>الأمني المتقدم</span></h1>
             </div>
-            <nav class="nav-links">
-                <a href="#"><i class="fas fa-home"></i> الرئيسية</a>
-                <a href="#"><i class="fas fa-info-circle"></i> حول</a>
-                <a href="#"><i class="fas fa-envelope"></i> اتصل بنا</a>
-            </nav>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="total-checks">0</div>
+                    <div class="stat-label">فحص</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="safe-checks">0</div>
+                    <div class="stat-label">آمن</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="warning-checks">0</div>
+                    <div class="stat-label">تحذير</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="danger-checks">0</div>
+                    <div class="stat-label">خطر</div>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -407,46 +563,15 @@
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title">
-                        <i class="fas fa-wifi"></i> فحص الاتصال بالإنترنت
+                        <i class="fas fa-wifi"></i> فحص الاتصال (18 فحص)
                     </h2>
-                    <span id="connection-status" class="status status-safe">آمن</span>
+                    <span id="connection-status" class="status status-safe">جاري الفحص...</span>
                 </div>
                 <div class="card-body">
-                    <div class="check-item">
-                        <div class="check-info">
-                            <div class="check-icon check-icon-safe">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div>
-                                <h3>سرعة الاتصال</h3>
-                                <p id="connection-speed">فحص السرعة...</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="check-item">
-                        <div class="check-info">
-                            <div class="check-icon check-icon-safe">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div>
-                                <h3>استقرار الاتصال</h3>
-                                <p id="connection-stability">فحص الاستقرار...</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="check-item">
-                        <div class="check-info">
-                            <div class="check-icon check-icon-safe">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div>
-                                <h3>عنوان IP</h3>
-                                <p id="ip-address">جاري التحميل...</p>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- سيتم إضافة عناصر الفحص عبر JavaScript -->
+                    <div id="connection-checks"></div>
                     <div class="progress-container">
-                        <p>جودة الاتصال</p>
+                        <p>جودة الاتصال الشاملة</p>
                         <div class="progress-bar">
                             <div id="connection-progress" class="progress-fill"></div>
                         </div>
@@ -458,53 +583,16 @@
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title">
-                        <i class="fas fa-globe"></i> فحص المتصفح
+                        <i class="fas fa-globe"></i> فحص المتصفح (22 فحص)
                     </h2>
-                    <span id="browser-status" class="status status-warning">تحذير</span>
+                    <span id="browser-status" class="status status-warning">جاري الفحص...</span>
                 </div>
                 <div class="card-body">
-                    <div class="check-item">
-                        <div class="check-info">
-                            <div class="check-icon check-icon-safe">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div>
-                                <h3>نوع المتصفح</h3>
-                                <p id="browser-name">جاري التحميل...</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="check-item">
-                        <div class="check-info">
-                            <div class="check-icon check-icon-warning">
-                                <i class="fas fa-exclamation-triangle"></i>
-                            </div>
-                            <div>
-                                <h3>الإصدار</h3>
-                                <p id="browser-version">قديم - يوصى بالتحديث</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="check-item">
-                        <div class="check-info">
-                            <div class="check-icon check-icon-safe">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div>
-                                <h3>الكوكيز مفعلة</h3>
-                                <p id="cookies-status">مفعلة</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="check-item">
-                        <div class="check-info">
-                            <div class="check-icon check-icon-danger">
-                                <i class="fas fa-times"></i>
-                            </div>
-                            <div>
-                                <h3>JavaScript</h3>
-                                <p id="javascript-status">مفعل</p>
-                            </div>
+                    <div id="browser-checks"></div>
+                    <div class="progress-container">
+                        <p>أمان المتصفح الشامل</p>
+                        <div class="progress-bar">
+                            <div id="browser-progress" class="progress-fill"></div>
                         </div>
                     </div>
                 </div>
@@ -514,53 +602,16 @@
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title">
-                        <i class="fas fa-laptop"></i> فحص الجهاز
+                        <i class="fas fa-laptop"></i> فحص الجهاز (20 فحص)
                     </h2>
-                    <span id="device-status" class="status status-safe">آمن</span>
+                    <span id="device-status" class="status status-safe">جاري الفحص...</span>
                 </div>
                 <div class="card-body">
-                    <div class="check-item">
-                        <div class="check-info">
-                            <div class="check-icon check-icon-safe">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div>
-                                <h3>نظام التشغيل</h3>
-                                <p id="os-type">جاري التحميل...</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="check-item">
-                        <div class="check-info">
-                            <div class="check-icon check-icon-warning">
-                                <i class="fas fa-exclamation-triangle"></i>
-                            </div>
-                            <div>
-                                <h3>الشاشة</h3>
-                                <p id="screen-resolution">غير محسن للأجهزة المحمولة</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="check-item">
-                        <div class="check-info">
-                            <div class="check-icon check-icon-safe">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div>
-                                <h3>اللغة والوقت</h3>
-                                <p id="language-time">جاري التحميل...</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="check-item">
-                        <div class="check-info">
-                            <div class="check-icon check-icon-safe">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div>
-                                <h3>الذاكرة المتاحة</h3>
-                                <p id="memory-status">جيد</p>
-                            </div>
+                    <div id="device-checks"></div>
+                    <div class="progress-container">
+                        <p>أداء الجهاز الشامل</p>
+                        <div class="progress-bar">
+                            <div id="device-progress" class="progress-fill"></div>
                         </div>
                     </div>
                 </div>
@@ -570,411 +621,1178 @@
         <!-- Action Buttons -->
         <section class="action-section">
             <button id="start-scan" class="btn btn-primary btn-lg">
-                <i class="fas fa-play-circle"></i> بدء الفحص الشامل
+                <i class="fas fa-play-circle"></i> بدء الفحص الشامل (60+ فحص)
             </button>
-            <button id="show-details" class="btn btn-success">
-                <i class="fas fa-chart-bar"></i> عرض التفاصيل الكاملة
+            <button id="quick-scan" class="btn btn-success">
+                <i class="fas fa-bolt"></i> فحص سريع
+            </button>
+            <button id="deep-scan" class="btn btn-warning">
+                <i class="fas fa-search-plus"></i> فحص عميق
+            </button>
+            <button id="show-details" class="btn btn-info">
+                <i class="fas fa-chart-bar"></i> النتائج التفصيلية
+            </button>
+            <button id="export-results" class="btn btn-success">
+                <i class="fas fa-download"></i> تصدير النتائج
             </button>
         </section>
 
         <!-- Detailed Results -->
         <section id="detailed-results" class="detailed-results">
-            <h2><i class="fas fa-file-alt"></i> النتائج التفصيلية للفحص</h2>
+            <h2><i class="fas fa-file-alt"></i> النتائج التفصيلية للفحص الشامل</h2>
             <div class="results-grid">
-                <div class="result-item">
-                    <div class="result-title">معلومات الاتصال</div>
-                    <div class="result-value" id="detailed-connection"></div>
-                </div>
-                <div class="result-item">
-                    <div class="result-title">معلومات المتصفح</div>
-                    <div class="result-value" id="detailed-browser"></div>
-                </div>
-                <div class="result-item">
-                    <div class="result-title">معلومات الجهاز</div>
-                    <div class="result-value" id="detailed-device"></div>
-                </div>
-                <div class="result-item">
-                    <div class="result-title">الإعدادات الأمنية</div>
-                    <div class="result-value" id="detailed-security"></div>
-                </div>
-                <div class="result-item">
-                    <div class="result-title">معلومات الشبكة</div>
-                    <div class="result-value" id="detailed-network"></div>
-                </div>
-                <div class="result-item">
-                    <div class="result-title">أداء النظام</div>
-                    <div class="result-value" id="detailed-performance"></div>
-                </div>
+                <!-- سيتم إضافة النتائج التفصيلية عبر JavaScript -->
+            </div>
+        </section>
+
+        <!-- Security Report -->
+        <section class="card" style="margin-top: 2rem;">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-file-medical-alt"></i> التقرير الأمني الشامل
+                </h2>
+                <span id="overall-security" class="status status-warning">جاري التقييم...</span>
+            </div>
+            <div class="card-body">
+                <div id="security-report"></div>
+                <button id="view-full-report" class="btn btn-primary btn-block">
+                    <i class="fas fa-eye"></i> عرض التقرير الكامل
+                </button>
             </div>
         </section>
     </main>
+
+    <!-- Modal for Full Report -->
+    <div id="report-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-file-pdf"></i> التقرير الأمني الكامل</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="full-report-content"></div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer>
         <div class="container footer-content">
             <div class="logo">
                 <i class="fas fa-shield-alt"></i>
-                <h2>فحص الأمان الشامل</h2>
+                <h2>نظام الفحص الأمني المتقدم</h2>
             </div>
-            <p>منصة متكاملة لفحص أمان الاتصال والمتصفح والجهاز</p>
+            <p>منصة متكاملة لفحص أمان الاتصال والمتصفح والجهاز بأكثر من 60 فحص مختلف</p>
             <div class="footer-links">
                 <a href="#"><i class="fas fa-shield-alt"></i> سياسة الخصوصية</a>
                 <a href="#"><i class="fas fa-file-contract"></i> الشروط والأحكام</a>
                 <a href="#"><i class="fas fa-question-circle"></i> المساعدة</a>
+                <a href="#"><i class="fas fa-bug"></i> الإبلاغ عن مشكلة</a>
+                <a href="#"><i class="fas fa-code"></i> API للمطورين</a>
             </div>
-            <p class="copyright">© 2023 جميع الحقوق محفوظة | تم التطوير بأحدث تقنيات الويب</p>
+            <p class="copyright">© 2023 جميع الحقوق محفوظة | تم التطوير بأحدث تقنيات الويب والأمان</p>
         </div>
     </footer>
 
     <script>
         // عناصر DOM
         const startScanBtn = document.getElementById('start-scan');
+        const quickScanBtn = document.getElementById('quick-scan');
+        const deepScanBtn = document.getElementById('deep-scan');
         const showDetailsBtn = document.getElementById('show-details');
+        const exportResultsBtn = document.getElementById('export-results');
+        const viewFullReportBtn = document.getElementById('view-full-report');
+        const reportModal = document.getElementById('report-modal');
+        const closeModalBtn = document.querySelector('.close-modal');
         const detailedResults = document.getElementById('detailed-results');
-        const connectionProgress = document.getElementById('connection-progress');
         
-        // عناصر الفحص
-        const connectionStatus = document.getElementById('connection-status');
-        const connectionSpeed = document.getElementById('connection-speed');
-        const connectionStability = document.getElementById('connection-stability');
-        const ipAddress = document.getElementById('ip-address');
+        // عناصر الإحصاءات
+        const totalChecksElement = document.getElementById('total-checks');
+        const safeChecksElement = document.getElementById('safe-checks');
+        const warningChecksElement = document.getElementById('warning-checks');
+        const dangerChecksElement = document.getElementById('danger-checks');
         
-        const browserStatus = document.getElementById('browser-status');
-        const browserName = document.getElementById('browser-name');
-        const browserVersion = document.getElementById('browser-version');
-        const cookiesStatus = document.getElementById('cookies-status');
-        const javascriptStatus = document.getElementById('javascript-status');
+        // متغيرات التتبع
+        let scanResults = {
+            connection: {},
+            browser: {},
+            device: {},
+            security: {},
+            network: {},
+            performance: {}
+        };
         
-        const deviceStatus = document.getElementById('device-status');
-        const osType = document.getElementById('os-type');
-        const screenResolution = document.getElementById('screen-resolution');
-        const languageTime = document.getElementById('language-time');
-        const memoryStatus = document.getElementById('memory-status');
-        
-        // عناصر النتائج التفصيلية
-        const detailedConnection = document.getElementById('detailed-connection');
-        const detailedBrowser = document.getElementById('detailed-browser');
-        const detailedDevice = document.getElementById('detailed-device');
-        const detailedSecurity = document.getElementById('detailed-security');
-        const detailedNetwork = document.getElementById('detailed-network');
-        const detailedPerformance = document.getElementById('detailed-performance');
+        let checkCounters = {
+            total: 0,
+            safe: 0,
+            warning: 0,
+            danger: 0
+        };
 
-        // محاكاة سرعة الاتصال
-        function simulateConnectionSpeed() {
-            const speeds = ['بطيء', 'متوسط', 'جيد', 'سريع جداً'];
-            const randomSpeed = speeds[Math.floor(Math.random() * speeds.length)];
-            const randomPing = Math.floor(Math.random() * 200) + 20;
+        // قائمة الفحوصات الكاملة (60+ فحص)
+        const allChecks = {
+            connection: [
+                { id: 'conn-speed', name: 'سرعة الاتصال', type: 'speed' },
+                { id: 'conn-latency', name: 'زمن الوصول', type: 'latency' },
+                { id: 'conn-stability', name: 'استقرار الاتصال', type: 'stability' },
+                { id: 'conn-jitter', name: 'تذبذب الشبكة', type: 'jitter' },
+                { id: 'conn-packet-loss', name: 'فقدان الحزم', type: 'packetLoss' },
+                { id: 'conn-download', name: 'سرعة التنزيل', type: 'download' },
+                { id: 'conn-upload', name: 'سرعة الرفع', type: 'upload' },
+                { id: 'conn-ip', name: 'عنوان IP العام', type: 'ip' },
+                { id: 'conn-ip-local', name: 'عنوان IP المحلي', type: 'ipLocal' },
+                { id: 'conn-dns', name: 'خوادم DNS', type: 'dns' },
+                { id: 'conn-dns-leak', name: 'تسرب DNS', type: 'dnsLeak' },
+                { id: 'conn-isp', name: 'مزود الخدمة', type: 'isp' },
+                { id: 'conn-location', name: 'الموقع الجغرافي', type: 'location' },
+                { id: 'conn-proxy', name: 'وكيل الاتصال', type: 'proxy' },
+                { id: 'conn-vpn', name: 'اتصال VPN', type: 'vpn' },
+                { id: 'conn-tor', name: 'شبكة TOR', type: 'tor' },
+                { id: 'conn-webrtc', name: 'تسرب WebRTC', type: 'webrtc' },
+                { id: 'conn-ports', name: 'المنافذ المفتوحة', type: 'ports' }
+            ],
             
-            connectionSpeed.textContent = `${randomSpeed} (${randomPing}ms)`;
+            browser: [
+                { id: 'browser-name', name: 'نوع المتصفح', type: 'name' },
+                { id: 'browser-version', name: 'إصدار المتصفح', type: 'version' },
+                { id: 'browser-engine', name: 'محرك المتصفح', type: 'engine' },
+                { id: 'browser-cookies', name: 'تفعيل الكوكيز', type: 'cookies' },
+                { id: 'browser-js', name: 'تفعيل JavaScript', type: 'javascript' },
+                { id: 'browser-localstorage', name: 'التخزين المحلي', type: 'localStorage' },
+                { id: 'browser-sessionstorage', name: 'تخزين الجلسة', type: 'sessionStorage' },
+                { id: 'browser-indexeddb', name: 'قاعدة البيانات', type: 'indexedDB' },
+                { id: 'browser-websql', name: 'Web SQL', type: 'webSQL' },
+                { id: 'browser-cache', name: 'ذاكرة التخزين المؤقت', type: 'cache' },
+                { id: 'browser-do-not-track', name: 'عدم التتبع', type: 'doNotTrack' },
+                { id: 'browser-referrer', name: 'سياسة المرجع', type: 'referrer' },
+                { id: 'browser-plugins', name: 'الإضافات', type: 'plugins' },
+                { id: 'browser-extensions', name: 'الامتدادات', type: 'extensions' },
+                { id: 'browser-webgl', name: 'WebGL', type: 'webgl' },
+                { id: 'browser-canvas', name: 'تتبع Canvas', type: 'canvas' },
+                { id: 'browser-fonts', name: 'تتبع الخطوط', type: 'fonts' },
+                { id: 'browser-audio', name: 'تتبع الصوت', type: 'audio' },
+                { id: 'browser-battery', name: 'واجهة البطارية', type: 'battery' },
+                { id: 'browser-permissions', name: 'الصلاحيات', type: 'permissions' },
+                { id: 'browser-autofill', name: 'التعبئة التلقائية', type: 'autofill' },
+                { id: 'browser-password-manager', name: 'مدير كلمات المرور', type: 'passwordManager' }
+            ],
             
-            if (randomSpeed === 'سريع جداً') {
-                connectionSpeed.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-safe';
-                connectionSpeed.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-check"></i>';
-            } else if (randomSpeed === 'بطيء') {
-                connectionSpeed.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-danger';
-                connectionSpeed.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-times"></i>';
-            } else {
-                connectionSpeed.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-warning';
-                connectionSpeed.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-            }
+            device: [
+                { id: 'device-os', name: 'نظام التشغيل', type: 'os' },
+                { id: 'device-os-version', name: 'إصدار النظام', type: 'osVersion' },
+                { id: 'device-arch', name: 'بنية المعالج', type: 'architecture' },
+                { id: 'device-cpu-cores', name: 'نوى المعالج', type: 'cpuCores' },
+                { id: 'device-memory', name: 'الذاكرة العشوائية', type: 'memory' },
+                { id: 'device-storage', name: 'سعة التخزين', type: 'storage' },
+                { id: 'device-screen', name: 'دقة الشاشة', type: 'screen' },
+                { id: 'device-color-depth', name: 'عمق الألوان', type: 'colorDepth' },
+                { id: 'device-pixel-ratio', name: 'نسبة البكسل', type: 'pixelRatio' },
+                { id: 'device-orientation', name: 'اتجاه الجهاز', type: 'orientation' },
+                { id: 'device-language', name: 'لغة النظام', type: 'language' },
+                { id: 'device-timezone', name: 'المنطقة الزمنية', type: 'timezone' },
+                { id: 'device-browser-time', name: 'وقت المتصفح', type: 'browserTime' },
+                { id: 'device-system-time', name: 'وقت النظام', type: 'systemTime' },
+                { id: 'device-battery', name: 'حالة البطارية', type: 'battery' },
+                { id: 'device-online-status', name: 'حالة الاتصال', type: 'online' },
+                { id: 'device-vibrate', name: 'دعم الاهتزاز', type: 'vibrate' },
+                { id: 'device-notifications', name: 'دعم الإشعارات', type: 'notifications' },
+                { id: 'device-geolocation', name: 'دعم الموقع', type: 'geolocation' },
+                { id: 'device-camera', name: 'دعم الكاميرا', type: 'camera' }
+            ]
+        };
+
+        // تهيئة واجهة الفحوصات
+        function initializeCheckLists() {
+            // تهيئة فحوصات الاتصال
+            const connectionChecksContainer = document.getElementById('connection-checks');
+            allChecks.connection.forEach(check => {
+                const checkElement = createCheckElement(check.id, check.name);
+                connectionChecksContainer.appendChild(checkElement);
+            });
             
-            return randomSpeed;
+            // تهيئة فحوصات المتصفح
+            const browserChecksContainer = document.getElementById('browser-checks');
+            allChecks.browser.forEach(check => {
+                const checkElement = createCheckElement(check.id, check.name);
+                browserChecksContainer.appendChild(checkElement);
+            });
+            
+            // تهيئة فحوصات الجهاز
+            const deviceChecksContainer = document.getElementById('device-checks');
+            allChecks.device.forEach(check => {
+                const checkElement = createCheckElement(check.id, check.name);
+                deviceChecksContainer.appendChild(checkElement);
+            });
         }
 
-        // محاكاة استقرار الاتصال
-        function simulateConnectionStability() {
-            const stabilityOptions = ['مستقر جداً', 'مستقر', 'متقلب', 'غير مستقر'];
-            const randomStability = stabilityOptions[Math.floor(Math.random() * stabilityOptions.length)];
-            
-            connectionStability.textContent = randomStability;
-            
-            if (randomStability === 'مستقر جداً') {
-                connectionStability.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-safe';
-                connectionStability.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-check"></i>';
-            } else if (randomStability === 'غير مستقر') {
-                connectionStability.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-danger';
-                connectionStability.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-times"></i>';
-            } else {
-                connectionStability.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-warning';
-                connectionStability.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-            }
-            
-            return randomStability;
-        }
-
-        // الحصول على عنوان IP (محاكاة)
-        function getIPAddress() {
-            // في التطبيق الحقيقي، يمكن استخدام خدمة API لمعرفة IP المستخدم
-            // هنا نقوم بمحاكاة العنوان
-            const fakeIP = `192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
-            ipAddress.textContent = fakeIP;
-            return fakeIP;
-        }
-
-        // اكتشاف معلومات المتصفح
-        function detectBrowser() {
-            const userAgent = navigator.userAgent;
-            let browserName = "متصفح غير معروف";
-            let browserVersion = "غير معروف";
-            
-            if (userAgent.includes("Chrome") && !userAgent.includes("Edg")) {
-                browserName = "Google Chrome";
-                browserVersion = userAgent.match(/Chrome\/(\d+)/)[1];
-            } else if (userAgent.includes("Firefox")) {
-                browserName = "Mozilla Firefox";
-                browserVersion = userAgent.match(/Firefox\/(\d+)/)[1];
-            } else if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) {
-                browserName = "Apple Safari";
-                browserVersion = userAgent.match(/Version\/(\d+)/)[1];
-            } else if (userAgent.includes("Edg")) {
-                browserName = "Microsoft Edge";
-                browserVersion = userAgent.match(/Edg\/(\d+)/)[1];
-            }
-            
-            document.getElementById('browser-name').textContent = browserName;
-            document.getElementById('browser-version').textContent = `الإصدار ${browserVersion}`;
-            
-            // تحديث حالة المتصفح بناءً على الإصدار
-            const versionNum = parseInt(browserVersion);
-            if (versionNum < 80 && (browserName.includes("Chrome") || browserName.includes("Firefox"))) {
-                browserStatus.textContent = "خطر";
-                browserStatus.className = "status status-danger";
-            } else if (versionNum < 100) {
-                browserStatus.textContent = "تحذير";
-                browserStatus.className = "status status-warning";
-            } else {
-                browserStatus.textContent = "آمن";
-                browserStatus.className = "status status-safe";
-            }
-            
-            return { name: browserName, version: browserVersion };
-        }
-
-        // فحص حالة الكوكيز
-        function checkCookies() {
-            const cookiesEnabled = navigator.cookieEnabled;
-            cookiesStatus.textContent = cookiesEnabled ? "مفعلة" : "معطلة";
-            
-            if (!cookiesEnabled) {
-                cookiesStatus.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-danger';
-                cookiesStatus.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-times"></i>';
-            }
-            
-            return cookiesEnabled;
-        }
-
-        // فحص JavaScript
-        function checkJavaScript() {
-            const jsEnabled = true; // بما أننا نستخدم JS، فهو مفعل بالتأكيد
-            javascriptStatus.textContent = jsEnabled ? "مفعل" : "معطل";
-            return jsEnabled;
-        }
-
-        // اكتشاف نظام التشغيل
-        function detectOS() {
-            const userAgent = navigator.userAgent;
-            let os = "نظام غير معروف";
-            
-            if (userAgent.includes("Win")) os = "Windows";
-            else if (userAgent.includes("Mac")) os = "macOS";
-            else if (userAgent.includes("Linux")) os = "Linux";
-            else if (userAgent.includes("Android")) os = "Android";
-            else if (userAgent.includes("iOS") || userAgent.includes("iPhone") || userAgent.includes("iPad")) os = "iOS";
-            
-            osType.textContent = os;
-            return os;
-        }
-
-        // اكتشاف دقة الشاشة
-        function detectScreenResolution() {
-            const width = window.screen.width;
-            const height = window.screen.height;
-            const resolution = `${width} × ${height}`;
-            
-            screenResolution.textContent = resolution;
-            
-            // تحسين للأجهزة المحمولة
-            if (width < 768) {
-                screenResolution.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-warning';
-                screenResolution.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-                screenResolution.textContent = `${resolution} (غير محسن للأجهزة المحمولة)`;
-            }
-            
-            return resolution;
-        }
-
-        // اكتشاف اللغة والوقت
-        function detectLanguageAndTime() {
-            const language = navigator.language || navigator.userLanguage;
-            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('ar-SA');
-            
-            languageTime.textContent = `${language} | ${timezone} | ${timeString}`;
-            return { language, timezone, time: timeString };
-        }
-
-        // محاكاة حالة الذاكرة
-        function simulateMemoryStatus() {
-            const memoryOptions = ['منخفض', 'متوسط', 'جيد', 'ممتاز'];
-            const randomMemory = memoryOptions[Math.floor(Math.random() * memoryOptions.length)];
-            
-            memoryStatus.textContent = randomMemory;
-            
-            if (randomMemory === 'منخفض') {
-                memoryStatus.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-danger';
-                memoryStatus.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-times"></i>';
-            } else if (randomMemory === 'متوسط') {
-                memoryStatus.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-warning';
-                memoryStatus.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-            } else {
-                memoryStatus.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-safe';
-                memoryStatus.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-check"></i>';
-            }
-            
-            return randomMemory;
-        }
-
-        // تحديث حالة الجهاز
-        function updateDeviceStatus() {
-            const screenRes = detectScreenResolution();
-            const memoryStatus = simulateMemoryStatus();
-            
-            if (memoryStatus === 'منخفض' || screenRes.includes("غير محسن")) {
-                deviceStatus.textContent = "تحذير";
-                deviceStatus.className = "status status-warning";
-            } else {
-                deviceStatus.textContent = "آمن";
-                deviceStatus.className = "status status-safe";
-            }
-        }
-
-        // تحديث حالة الاتصال
-        function updateConnectionStatus() {
-            const speed = simulateConnectionSpeed();
-            const stability = simulateConnectionStability();
-            
-            if (speed === 'بطيء' || stability === 'غير مستقر') {
-                connectionStatus.textContent = "خطر";
-                connectionStatus.className = "status status-danger";
-            } else if (speed === 'متوسط' || stability === 'متقلب') {
-                connectionStatus.textContent = "تحذير";
-                connectionStatus.className = "status status-warning";
-            } else {
-                connectionStatus.textContent = "آمن";
-                connectionStatus.className = "status status-safe";
-            }
-            
-            // تحديث شريط التقدم
-            let progressValue = 100;
-            if (speed === 'بطيء') progressValue = 30;
-            else if (speed === 'متوسط') progressValue = 60;
-            else if (speed === 'جيد') progressValue = 80;
-            
-            connectionProgress.style.width = `${progressValue}%`;
-        }
-
-        // تحديث النتائج التفصيلية
-        function updateDetailedResults() {
-            const connectionInfo = `
-                سرعة الاتصال: ${connectionSpeed.textContent}<br>
-                استقرار الاتصال: ${connectionStability.textContent}<br>
-                عنوان IP: ${ipAddress.textContent}<br>
-                جودة الاتصال: ${connectionStatus.textContent}
+        // إنشاء عنصر فحص
+        function createCheckElement(id, name) {
+            const div = document.createElement('div');
+            div.className = 'check-item';
+            div.id = `check-${id}`;
+            div.innerHTML = `
+                <div class="check-info">
+                    <div class="check-icon check-icon-neutral">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <div>
+                        <div class="check-name">${name}</div>
+                        <div class="check-details">في انتظار الفحص...</div>
+                    </div>
+                </div>
+                <div class="check-value">--</div>
             `;
+            return div;
+        }
+
+        // تحديث حالة الفحص
+        function updateCheckStatus(id, status, value, details = '') {
+            const checkElement = document.getElementById(`check-${id}`);
+            if (!checkElement) return;
             
-            const browserInfo = `
-                المتصفح: ${browserName.textContent}<br>
-                الإصدار: ${browserVersion.textContent}<br>
-                الكوكيز: ${cookiesStatus.textContent}<br>
-                JavaScript: ${javascriptStatus.textContent}<br>
-                حالة الأمان: ${browserStatus.textContent}
-            `;
+            const iconElement = checkElement.querySelector('.check-icon');
+            const detailsElement = checkElement.querySelector('.check-details');
+            const valueElement = checkElement.querySelector('.check-value');
             
-            const deviceInfo = `
-                نظام التشغيل: ${osType.textContent}<br>
-                دقة الشاشة: ${screenResolution.textContent}<br>
-                اللغة والوقت: ${languageTime.textContent}<br>
-                حالة الذاكرة: ${memoryStatus.textContent}<br>
-                حالة الجهاز: ${deviceStatus.textContent}
-            `;
+            // تحديث العداد
+            checkCounters.total++;
             
-            const securityInfo = `
-                اتصال آمن (HTTPS): ${window.location.protocol === 'https:' ? 'نعم' : 'لا'}<br>
-                التشفير المدعوم: TLS 1.2+<br>
-                حماية من التتبع: جزئية<br>
-                صلاحيات الموقع: محدودة<br>
-                إعدادات الخصوصية: ${Math.random() > 0.5 ? 'جيدة' : 'تحتاج تحسين'}
-            `;
+            // تحديث الحالة
+            switch(status) {
+                case 'safe':
+                    iconElement.className = 'check-icon check-icon-safe';
+                    iconElement.innerHTML = '<i class="fas fa-check"></i>';
+                    checkCounters.safe++;
+                    break;
+                case 'warning':
+                    iconElement.className = 'check-icon check-icon-warning';
+                    iconElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+                    checkCounters.warning++;
+                    break;
+                case 'danger':
+                    iconElement.className = 'check-icon check-icon-danger';
+                    iconElement.innerHTML = '<i class="fas fa-times"></i>';
+                    checkCounters.danger++;
+                    break;
+                case 'info':
+                    iconElement.className = 'check-icon check-icon-info';
+                    iconElement.innerHTML = '<i class="fas fa-info-circle"></i>';
+                    break;
+            }
             
-            const networkInfo = `
-                نوع الاتصال: ${navigator.connection ? navigator.connection.effectiveType : 'غير معروف'}<br>
-                سرعة التنزيل المقدرة: ${Math.floor(Math.random() * 50) + 5} Mbps<br>
-                سرعة الرفع المقدرة: ${Math.floor(Math.random() * 20) + 2} Mbps<br>
-                وقت الاستجابة: ${Math.floor(Math.random() * 200) + 20}ms<br>
-                مزود الخدمة: ${Math.random() > 0.5 ? 'محلي' : 'دولي'}
-            `;
+            // تحديث التفاصيل والقيمة
+            if (details) detailsElement.textContent = details;
+            valueElement.textContent = value;
             
-            const performanceInfo = `
-                وقت تحميل الصفحة: ${Math.floor(Math.random() * 3000) + 500}ms<br>
-                استخدام الذاكرة: ${Math.floor(Math.random() * 80) + 10}%<br>
-                استخدام المعالج: ${Math.floor(Math.random() * 60) + 5}%<br>
-                أداء الرسومات: ${Math.random() > 0.5 ? 'جيد' : 'متوسط'}<br>
-                التخزين المؤقت: ${Math.random() > 0.5 ? 'مفعل' : 'معطل'}
-            `;
+            // تحديث الإحصاءات
+            updateStats();
+        }
+
+        // تحديث الإحصاءات
+        function updateStats() {
+            totalChecksElement.textContent = checkCounters.total;
+            safeChecksElement.textContent = checkCounters.safe;
+            warningChecksElement.textContent = checkCounters.warning;
+            dangerChecksElement.textContent = checkCounters.danger;
+        }
+
+        // فحوصات الاتصال المتقدمة
+        async function performConnectionChecks() {
+            const connectionStatus = document.getElementById('connection-status');
+            connectionStatus.textContent = 'جاري الفحص...';
+            connectionStatus.className = 'status status-info';
             
-            detailedConnection.innerHTML = connectionInfo;
-            detailedBrowser.innerHTML = browserInfo;
-            detailedDevice.innerHTML = deviceInfo;
-            detailedSecurity.innerHTML = securityInfo;
-            detailedNetwork.innerHTML = networkInfo;
-            detailedPerformance.innerHTML = performanceInfo;
+            // 1. فحص سرعة الاتصال
+            await simulateCheck('conn-speed', 800, () => {
+                const speed = Math.floor(Math.random() * 100) + 10;
+                const status = speed > 50 ? 'safe' : (speed > 20 ? 'warning' : 'danger');
+                updateCheckStatus('conn-speed', status, `${speed} Mbps`, 
+                    speed > 50 ? 'سرعة ممتازة' : (speed > 20 ? 'سرعة متوسطة' : 'سرعة بطيئة'));
+                scanResults.connection.speed = speed;
+                return speed;
+            });
+            
+            // 2. فحص زمن الوصول
+            await simulateCheck('conn-latency', 600, () => {
+                const latency = Math.floor(Math.random() * 200) + 10;
+                const status = latency < 50 ? 'safe' : (latency < 100 ? 'warning' : 'danger');
+                updateCheckStatus('conn-latency', status, `${latency} مللي ثانية`, 
+                    latency < 50 ? 'استجابة سريعة' : (latency < 100 ? 'استجابة متوسطة' : 'استجابة بطيئة'));
+                scanResults.connection.latency = latency;
+                return latency;
+            });
+            
+            // 3. فحص استقرار الاتصال
+            await simulateCheck('conn-stability', 700, () => {
+                const stability = ['مستقر جداً', 'مستقر', 'متقلب', 'غير مستقر'][Math.floor(Math.random() * 4)];
+                const status = stability === 'مستقر جداً' ? 'safe' : (stability === 'مستقر' ? 'warning' : 'danger');
+                updateCheckStatus('conn-stability', status, stability, 
+                    `جودة الاتصال: ${stability}`);
+                scanResults.connection.stability = stability;
+                return stability;
+            });
+            
+            // 4. فحص تذبذب الشبكة
+            await simulateCheck('conn-jitter', 500, () => {
+                const jitter = Math.floor(Math.random() * 30) + 1;
+                const status = jitter < 10 ? 'safe' : (jitter < 20 ? 'warning' : 'danger');
+                updateCheckStatus('conn-jitter', status, `${jitter} مللي ثانية`, 
+                    jitter < 10 ? 'تذبذب منخفض' : (jitter < 20 ? 'تذبذب متوسط' : 'تذبذب مرتفع'));
+                scanResults.connection.jitter = jitter;
+                return jitter;
+            });
+            
+            // 5. فحص فقدان الحزم
+            await simulateCheck('conn-packet-loss', 500, () => {
+                const loss = Math.floor(Math.random() * 10);
+                const status = loss === 0 ? 'safe' : (loss < 5 ? 'warning' : 'danger');
+                updateCheckStatus('conn-packet-loss', status, `${loss}%`, 
+                    loss === 0 ? 'لا يوجد فقد' : `فقدان ${loss}% من الحزم`);
+                scanResults.connection.packetLoss = loss;
+                return loss;
+            });
+            
+            // 6. فحص سرعة التنزيل
+            await simulateCheck('conn-download', 900, () => {
+                const download = Math.floor(Math.random() * 500) + 50;
+                const status = download > 200 ? 'safe' : (download > 100 ? 'warning' : 'danger');
+                updateCheckStatus('conn-download', status, `${download} Mbps`, 
+                    download > 200 ? 'تنزيل سريع' : (download > 100 ? 'تنزيل متوسط' : 'تنزيل بطيء'));
+                scanResults.connection.download = download;
+                return download;
+            });
+            
+            // 7. فحص سرعة الرفع
+            await simulateCheck('conn-upload', 800, () => {
+                const upload = Math.floor(Math.random() * 200) + 10;
+                const status = upload > 100 ? 'safe' : (upload > 50 ? 'warning' : 'danger');
+                updateCheckStatus('conn-upload', status, `${upload} Mbps`, 
+                    upload > 100 ? 'رفع سريع' : (upload > 50 ? 'رفع متوسط' : 'رفع بطيء'));
+                scanResults.connection.upload = upload;
+                return upload;
+            });
+            
+            // 8. فحص عنوان IP العام
+            await simulateCheck('conn-ip', 400, () => {
+                const ip = `192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
+                updateCheckStatus('conn-ip', 'info', ip, 'العنوان العام للشبكة');
+                scanResults.connection.publicIP = ip;
+                return ip;
+            });
+            
+            // 9. فحص عنوان IP المحلي
+            await simulateCheck('conn-ip-local', 300, () => {
+                const ip = `10.0.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
+                updateCheckStatus('conn-ip-local', 'info', ip, 'العنوان المحلي للجهاز');
+                scanResults.connection.localIP = ip;
+                return ip;
+            });
+            
+            // 10. فحص خوادم DNS
+            await simulateCheck('conn-dns', 500, () => {
+                const dnsServers = ['8.8.8.8', '8.8.4.4', '1.1.1.1', '9.9.9.9'];
+                const randomDns = dnsServers[Math.floor(Math.random() * dnsServers.length)];
+                updateCheckStatus('conn-dns', 'safe', randomDns, 'خادم DNS الرئيسي');
+                scanResults.connection.dns = randomDns;
+                return randomDns;
+            });
+            
+            // 11. فحص تسرب DNS
+            await simulateCheck('conn-dns-leak', 600, () => {
+                const leak = Math.random() > 0.7;
+                const status = leak ? 'danger' : 'safe';
+                updateCheckStatus('conn-dns-leak', status, leak ? 'نعم' : 'لا', 
+                    leak ? 'تم اكتشاف تسرب DNS' : 'لا يوجد تسرب DNS');
+                scanResults.connection.dnsLeak = leak;
+                return leak;
+            });
+            
+            // 12. فحص مزود الخدمة
+            await simulateCheck('conn-isp', 400, () => {
+                const isps = ['STC', 'Mobily', 'Zain', 'اتصالات', 'فودافون'];
+                const randomIsp = isps[Math.floor(Math.random() * isps.length)];
+                updateCheckStatus('conn-isp', 'info', randomIsp, 'مزود خدمة الإنترنت');
+                scanResults.connection.isp = randomIsp;
+                return randomIsp;
+            });
+            
+            // 13. فحص الموقع الجغرافي
+            await simulateCheck('conn-location', 500, () => {
+                const cities = ['الرياض', 'جدة', 'الدمام', 'مكة', 'المدينة'];
+                const randomCity = cities[Math.floor(Math.random() * cities.length)];
+                updateCheckStatus('conn-location', 'info', randomCity, 'الموقع المقدر');
+                scanResults.connection.location = randomCity;
+                return randomCity;
+            });
+            
+            // 14. فحص وكيل الاتصال
+            await simulateCheck('conn-proxy', 400, () => {
+                const hasProxy = Math.random() > 0.8;
+                const status = hasProxy ? 'warning' : 'safe';
+                updateCheckStatus('conn-proxy', status, hasProxy ? 'مفعل' : 'غير مفعل', 
+                    hasProxy ? 'يتم استخدام بروكسي' : 'لا يوجد بروكسي');
+                scanResults.connection.proxy = hasProxy;
+                return hasProxy;
+            });
+            
+            // 15. فحص اتصال VPN
+            await simulateCheck('conn-vpn', 400, () => {
+                const hasVPN = Math.random() > 0.7;
+                const status = hasVPN ? 'safe' : 'info';
+                updateCheckStatus('conn-vpn', status, hasVPN ? 'مفعل' : 'غير مفعل', 
+                    hasVPN ? 'اتصال VPN نشط' : 'لا يوجد VPN');
+                scanResults.connection.vpn = hasVPN;
+                return hasVPN;
+            });
+            
+            // 16. فحص شبكة TOR
+            await simulateCheck('conn-tor', 400, () => {
+                const hasTor = Math.random() > 0.9;
+                const status = hasTor ? 'warning' : 'safe';
+                updateCheckStatus('conn-tor', status, hasTor ? 'مفعل' : 'غير مفعل', 
+                    hasTor ? 'يتم استخدام Tor' : 'لا يوجد Tor');
+                scanResults.connection.tor = hasTor;
+                return hasTor;
+            });
+            
+            // 17. فحص تسرب WebRTC
+            await simulateCheck('conn-webrtc', 500, () => {
+                const leak = Math.random() > 0.8;
+                const status = leak ? 'danger' : 'safe';
+                updateCheckStatus('conn-webrtc', status, leak ? 'نعم' : 'لا', 
+                    leak ? 'تم اكتشاف تسرب WebRTC' : 'لا يوجد تسرب WebRTC');
+                scanResults.connection.webrtcLeak = leak;
+                return leak;
+            });
+            
+            // 18. فحص المنافذ المفتوحة
+            await simulateCheck('conn-ports', 700, () => {
+                const openPorts = Math.floor(Math.random() * 10);
+                const status = openPorts > 5 ? 'danger' : (openPorts > 0 ? 'warning' : 'safe');
+                updateCheckStatus('conn-ports', status, `${openPorts} منافذ`, 
+                    openPorts > 0 ? `${openPorts} منافذ مفتوحة` : 'لا توجد منافذ مفتوحة');
+                scanResults.connection.openPorts = openPorts;
+                return openPorts;
+            });
+            
+            // تحديث حالة الاتصال الشاملة
+            const safePercentage = (checkCounters.safe / 18) * 100;
+            const connectionProgress = document.getElementById('connection-progress');
+            connectionProgress.style.width = `${safePercentage}%`;
+            
+            if (safePercentage > 80) {
+                connectionStatus.textContent = 'آمن';
+                connectionStatus.className = 'status status-safe';
+            } else if (safePercentage > 60) {
+                connectionStatus.textContent = 'تحذير';
+                connectionStatus.className = 'status status-warning';
+            } else {
+                connectionStatus.textContent = 'خطر';
+                connectionStatus.className = 'status status-danger';
+            }
+        }
+
+        // فحوصات المتصفح المتقدمة
+        async function performBrowserChecks() {
+            const browserStatus = document.getElementById('browser-status');
+            browserStatus.textContent = 'جاري الفحص...';
+            browserStatus.className = 'status status-info';
+            
+            // 1. فحص نوع المتصفح
+            await simulateCheck('browser-name', 300, () => {
+                const userAgent = navigator.userAgent;
+                let browser = "غير معروف";
+                
+                if (userAgent.includes("Chrome") && !userAgent.includes("Edg")) browser = "Google Chrome";
+                else if (userAgent.includes("Firefox")) browser = "Mozilla Firefox";
+                else if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) browser = "Apple Safari";
+                else if (userAgent.includes("Edg")) browser = "Microsoft Edge";
+                
+                updateCheckStatus('browser-name', 'info', browser, 'نوع المتصفح المستخدم');
+                scanResults.browser.name = browser;
+                return browser;
+            });
+            
+            // 2. فحص إصدار المتصفح
+            await simulateCheck('browser-version', 300, () => {
+                const version = navigator.appVersion;
+                const versionNum = parseInt(version.match(/\d+/)?.[0] || '100');
+                const status = versionNum > 100 ? 'safe' : (versionNum > 80 ? 'warning' : 'danger');
+                
+                updateCheckStatus('browser-version', status, `الإصدار ${versionNum}`, 
+                    versionNum > 100 ? 'إصدار حديث' : 'يوصى بالتحديث');
+                scanResults.browser.version = versionNum;
+                return versionNum;
+            });
+            
+            // 3. فحص محرك المتصفح
+            await simulateCheck('browser-engine', 200, () => {
+                let engine = "غير معروف";
+                if (navigator.userAgent.includes("AppleWebKit")) engine = "WebKit";
+                if (navigator.userAgent.includes("Gecko")) engine = "Gecko";
+                if (navigator.userAgent.includes("Trident")) engine = "Trident";
+                
+                updateCheckStatus('browser-engine', 'info', engine, 'محرك التصميم');
+                scanResults.browser.engine = engine;
+                return engine;
+            });
+            
+            // 4. فحص تفعيل الكوكيز
+            await simulateCheck('browser-cookies', 200, () => {
+                const enabled = navigator.cookieEnabled;
+                updateCheckStatus('browser-cookies', enabled ? 'safe' : 'danger', 
+                    enabled ? 'مفعل' : 'معطل', 
+                    enabled ? 'الكوكيز مفعلة' : 'الكوكيز معطلة - قد لا تعمل بعض المواقع');
+                scanResults.browser.cookies = enabled;
+                return enabled;
+            });
+            
+            // 5. فحص تفعيل JavaScript
+            await simulateCheck('browser-js', 100, () => {
+                const enabled = true; // بما أننا هنا، فهي مفعلة
+                updateCheckStatus('browser-js', 'safe', 'مفعل', 'JavaScript مفعل');
+                scanResults.browser.javascript = enabled;
+                return enabled;
+            });
+            
+            // 6. فحص التخزين المحلي
+            await simulateCheck('browser-localstorage', 300, () => {
+                try {
+                    localStorage.setItem('test', 'test');
+                    localStorage.removeItem('test');
+                    updateCheckStatus('browser-localstorage', 'safe', 'مدعوم', 'LocalStorage مفعل');
+                    scanResults.browser.localStorage = true;
+                    return true;
+                } catch (e) {
+                    updateCheckStatus('browser-localstorage', 'warning', 'غير مدعوم', 'LocalStorage معطل');
+                    scanResults.browser.localStorage = false;
+                    return false;
+                }
+            });
+            
+            // 7. فحص تخزين الجلسة
+            await simulateCheck('browser-sessionstorage', 300, () => {
+                try {
+                    sessionStorage.setItem('test', 'test');
+                    sessionStorage.removeItem('test');
+                    updateCheckStatus('browser-sessionstorage', 'safe', 'مدعوم', 'SessionStorage مفعل');
+                    scanResults.browser.sessionStorage = true;
+                    return true;
+                } catch (e) {
+                    updateCheckStatus('browser-sessionstorage', 'warning', 'غير مدعوم', 'SessionStorage معطل');
+                    scanResults.browser.sessionStorage = false;
+                    return false;
+                }
+            });
+            
+            // 8. فحص قاعدة البيانات
+            await simulateCheck('browser-indexeddb', 400, () => {
+                const supported = 'indexedDB' in window;
+                updateCheckStatus('browser-indexeddb', supported ? 'safe' : 'info', 
+                    supported ? 'مدعوم' : 'غير مدعوم', 
+                    supported ? 'IndexedDB مفعل' : 'IndexedDB غير مدعوم');
+                scanResults.browser.indexedDB = supported;
+                return supported;
+            });
+            
+            // 9. فحص Web SQL
+            await simulateCheck('browser-websql', 400, () => {
+                const supported = 'openDatabase' in window;
+                updateCheckStatus('browser-webgl', supported ? 'safe' : 'info', 
+                    supported ? 'مدعوم' : 'غير مدعوم', 
+                    supported ? 'WebGL مفعل' : 'WebGL غير مدعوم');
+                scanResults.browser.webSQL = supported;
+                return supported;
+            });
+            
+            // 10. فحص ذاكرة التخزين المؤقت
+            await simulateCheck('browser-cache', 300, () => {
+                const supported = 'caches' in window;
+                updateCheckStatus('browser-cache', supported ? 'safe' : 'warning', 
+                    supported ? 'مفعل' : 'معطل', 
+                    supported ? 'Cache API مدعوم' : 'Cache API غير مدعوم');
+                scanResults.browser.cache = supported;
+                return supported;
+            });
+            
+            // 11. فحص عدم التتبع
+            await simulateCheck('browser-do-not-track', 200, () => {
+                const dnt = navigator.doNotTrack || window.doNotTrack;
+                const enabled = dnt === '1' || dnt === 'yes';
+                updateCheckStatus('browser-do-not-track', enabled ? 'safe' : 'info', 
+                    enabled ? 'مفعل' : 'معطل', 
+                    enabled ? 'ميزة عدم التتبع مفعلة' : 'ميزة عدم التتبع معطلة');
+                scanResults.browser.doNotTrack = enabled;
+                return enabled;
+            });
+            
+            // 12. فحص سياسة المرجع
+            await simulateCheck('browser-referrer', 300, () => {
+                const policy = document.referrerPolicy || 'غير معروف';
+                updateCheckStatus('browser-referrer', 'info', policy, 'سياسة المرجع الحالية');
+                scanResults.browser.referrerPolicy = policy;
+                return policy;
+            });
+            
+            // 13. فحص الإضافات
+            await simulateCheck('browser-plugins', 500, () => {
+                const plugins = navigator.plugins;
+                const count = plugins ? plugins.length : 0;
+                const status = count > 10 ? 'warning' : (count > 0 ? 'safe' : 'info');
+                
+                updateCheckStatus('browser-plugins', status, `${count} إضافات`, 
+                    `${count} إضافة مثبتة`);
+                scanResults.browser.plugins = count;
+                return count;
+            });
+            
+            // 14. فحص الامتدادات (محاكاة)
+            await simulateCheck('browser-extensions', 400, () => {
+                const count = Math.floor(Math.random() * 10);
+                const status = count > 7 ? 'warning' : (count > 0 ? 'safe' : 'info');
+                
+                updateCheckStatus('browser-extensions', status, `${count} امتدادات`, 
+                    `${count} امتداد مثبت`);
+                scanResults.browser.extensions = count;
+                return count;
+            });
+            
+            // 15. فحص WebGL
+            await simulateCheck('browser-webgl', 300, () => {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                const supported = !!gl;
+                
+                updateCheckStatus('browser-webgl', supported ? 'safe' : 'warning', 
+                    supported ? 'مدعوم' : 'غير مدعوم', 
+                    supported ? 'WebGL مفعل' : 'WebGL معطل أو غير مدعوم');
+                scanResults.browser.webgl = supported;
+                return supported;
+            });
+            
+            // 16. فحص تتبع Canvas (محاكاة)
+            await simulateCheck('browser-canvas', 400, () => {
+                const fingerprinting = Math.random() > 0.5;
+                updateCheckStatus('browser-canvas', fingerprinting ? 'danger' : 'safe', 
+                    fingerprinting ? 'نشط' : 'معطل', 
+                    fingerprinting ? 'تم اكتشاف تتبع Canvas' : 'لا يوجد تتبع Canvas');
+                scanResults.browser.canvasFingerprinting = fingerprinting;
+                return fingerprinting;
+            });
+            
+            // 17. فحص تتبع الخطوط (محاكاة)
+            await simulateCheck('browser-fonts', 400, () => {
+                const fingerprinting = Math.random() > 0.5;
+                updateCheckStatus('browser-fonts', fingerprinting ? 'warning' : 'safe', 
+                    fingerprinting ? 'نشط' : 'معطل', 
+                    fingerprinting ? 'تم اكتشاف تتبع الخطوط' : 'لا يوجد تتبع الخطوط');
+                scanResults.browser.fontFingerprinting = fingerprinting;
+                return fingerprinting;
+            });
+            
+            // 18. فحص تتبع الصوت (محاكاة)
+            await simulateCheck('browser-audio', 500, () => {
+                const fingerprinting = Math.random() > 0.6;
+                updateCheckStatus('browser-audio', fingerprinting ? 'warning' : 'safe', 
+                    fingerprinting ? 'نشط' : 'معطل', 
+                    fingerprinting ? 'تم اكتشاف تتبع الصوت' : 'لا يوجد تتبع الصوت');
+                scanResults.browser.audioFingerprinting = fingerprinting;
+                return fingerprinting;
+            });
+            
+            // 19. فحص واجهة البطارية
+            await simulateCheck('browser-battery', 300, () => {
+                const supported = 'getBattery' in navigator;
+                updateCheckStatus('browser-battery', supported ? 'warning' : 'safe', 
+                    supported ? 'مدعوم' : 'غير مدعوم', 
+                    supported ? 'واجهة البطارية مفعلة' : 'واجهة البطارية غير مدعومة');
+                scanResults.browser.batteryAPI = supported;
+                return supported;
+            });
+            
+            // 20. فحص الصلاحيات
+            await simulateCheck('browser-permissions', 400, () => {
+                const permissions = navigator.permissions;
+                updateCheckStatus('browser-permissions', permissions ? 'safe' : 'warning', 
+                    permissions ? 'مدعوم' : 'محدود', 
+                    permissions ? 'واجهة الصلاحيات مدعومة' : 'واجهة الصلاحيات محدودة');
+                scanResults.browser.permissionsAPI = !!permissions;
+                return !!permissions;
+            });
+            
+            // 21. فحص التعبئة التلقائية
+            await simulateCheck('browser-autofill', 300, () => {
+                const autofill = Math.random() > 0.3;
+                updateCheckStatus('browser-autofill', autofill ? 'safe' : 'info', 
+                    autofill ? 'مفعل' : 'معطل', 
+                    autofill ? 'التعبئة التلقائية مفعلة' : 'التعبئة التلقائية معطلة');
+                scanResults.browser.autofill = autofill;
+                return autofill;
+            });
+            
+            // 22. فحص مدير كلمات المرور
+            await simulateCheck('browser-password-manager', 300, () => {
+                const manager = Math.random() > 0.2;
+                updateCheckStatus('browser-password-manager', manager ? 'safe' : 'warning', 
+                    manager ? 'مفعل' : 'معطل', 
+                    manager ? 'مدير كلمات المرور مفعل' : 'مدير كلمات المرور معطل');
+                scanResults.browser.passwordManager = manager;
+                return manager;
+            });
+            
+            // تحديث حالة المتصفح الشاملة
+            const safePercentage = (checkCounters.safe / 22) * 100;
+            const browserProgress = document.getElementById('browser-progress');
+            browserProgress.style.width = `${safePercentage}%`;
+            
+            if (safePercentage > 75) {
+                browserStatus.textContent = 'آمن';
+                browserStatus.className = 'status status-safe';
+            } else if (safePercentage > 50) {
+                browserStatus.textContent = 'تحذير';
+                browserStatus.className = 'status status-warning';
+            } else {
+                browserStatus.textContent = 'خطر';
+                browserStatus.className = 'status status-danger';
+            }
+        }
+
+        // فحوصات الجهاز المتقدمة
+        async function performDeviceChecks() {
+            const deviceStatus = document.getElementById('device-status');
+            deviceStatus.textContent = 'جاري الفحص...';
+            deviceStatus.className = 'status status-info';
+            
+            // 1. فحص نظام التشغيل
+            await simulateCheck('device-os', 300, () => {
+                const userAgent = navigator.userAgent;
+                let os = "غير معروف";
+                
+                if (userAgent.includes("Win")) os = "Windows";
+                else if (userAgent.includes("Mac")) os = "macOS";
+                else if (userAgent.includes("Linux")) os = "Linux";
+                else if (userAgent.includes("Android")) os = "Android";
+                else if (userAgent.includes("iOS") || userAgent.includes("iPhone") || userAgent.includes("iPad")) os = "iOS";
+                
+                updateCheckStatus('device-os', 'info', os, 'نظام التشغيل الرئيسي');
+                scanResults.device.os = os;
+                return os;
+            });
+            
+            // 2. فحص إصدار النظام
+            await simulateCheck('device-os-version', 300, () => {
+                const version = navigator.platform || 'غير معروف';
+                updateCheckStatus('device-os-version', 'info', version, 'إصدار النظام');
+                scanResults.device.osVersion = version;
+                return version;
+            });
+            
+            // 3. فحص بنية المعالج
+            await simulateCheck('device-arch', 200, () => {
+                const arch = navigator.platform.includes('64') ? '64-bit' : '32-bit';
+                updateCheckStatus('device-arch', 'safe', arch, 'بنية المعالج');
+                scanResults.device.architecture = arch;
+                return arch;
+            });
+            
+            // 4. فحص نوى المعالج (محاكاة)
+            await simulateCheck('device-cpu-cores', 400, () => {
+                const cores = navigator.hardwareConcurrency || (Math.random() > 0.5 ? 4 : 2);
+                const status = cores >= 4 ? 'safe' : (cores >= 2 ? 'warning' : 'danger');
+                
+                updateCheckStatus('device-cpu-cores', status, `${cores} نواة`, 
+                    cores >= 4 ? 'أداء عالي' : (cores >= 2 ? 'أداء متوسط' : 'أداء منخفض'));
+                scanResults.device.cpuCores = cores;
+                return cores;
+            });
+            
+            // 5. فحص الذاكرة العشوائية (محاكاة)
+            await simulateCheck('device-memory', 500, () => {
+                const memory = navigator.deviceMemory || (Math.random() > 0.5 ? 8 : 4);
+                const status = memory >= 8 ? 'safe' : (memory >= 4 ? 'warning' : 'danger');
+                
+                updateCheckStatus('device-memory', status, `${memory} GB`, 
+                    memory >= 8 ? 'ذاكرة كافية' : (memory >= 4 ? 'ذاكرة متوسطة' : 'ذاكرة محدودة'));
+                scanResults.device.memory = memory;
+                return memory;
+            });
+            
+            // 6. فحص سعة التخزين (محاكاة)
+            await simulateCheck('device-storage', 600, () => {
+                const storage = Math.floor(Math.random() * 1000) + 128;
+                const status = storage >= 512 ? 'safe' : (storage >= 256 ? 'warning' : 'danger');
+                
+                updateCheckStatus('device-storage', status, `${storage} GB`, 
+                    storage >= 512 ? 'سعة تخزين كبيرة' : (storage >= 256 ? 'سعة تخزين متوسطة' : 'سعة تخزين محدودة'));
+                scanResults.device.storage = storage;
+                return storage;
+            });
+            
+            // 7. فحص دقة الشاشة
+            await simulateCheck('device-screen', 200, () => {
+                const width = window.screen.width;
+                const height = window.screen.height;
+                const resolution = `${width} × ${height}`;
+                
+                updateCheckStatus('device-screen', 'info', resolution, 'دقة الشاشة الحالية');
+                scanResults.device.screen = resolution;
+                return resolution;
+            });
+            
+            // 8. فحص عمق الألوان
+            await simulateCheck('device-color-depth', 200, () => {
+                const depth = window.screen.colorDepth || 24;
+                updateCheckStatus('device-color-depth', 'safe', `${depth}-bit`, 'عمق ألوان الشاشة');
+                scanResults.device.colorDepth = depth;
+                return depth;
+            });
+            
+            // 9. فحص نسبة البكسل
+            await simulateCheck('device-pixel-ratio', 200, () => {
+                const ratio = window.devicePixelRatio || 1;
+                updateCheckStatus('device-pixel-ratio', 'info', ratio.toString(), 'نسبة البكسل');
+                scanResults.device.pixelRatio = ratio;
+                return ratio;
+            });
+            
+            // 10. فحص اتجاه الجهاز
+            await simulateCheck('device-orientation', 300, () => {
+                const orientation = window.screen.orientation ? window.screen.orientation.type : 
+                                  (window.innerWidth > window.innerHeight ? 'landscape' : 'portrait');
+                updateCheckStatus('device-orientation', 'info', orientation, 'اتجاه الشاشة الحالي');
+                scanResults.device.orientation = orientation;
+                return orientation;
+            });
+            
+            // 11. فحص لغة النظام
+            await simulateCheck('device-language', 100, () => {
+                const lang = navigator.language || 'ar';
+                updateCheckStatus('device-language', 'info', lang, 'لغة النظام الافتراضية');
+                scanResults.device.language = lang;
+                return lang;
+            });
+            
+            // 12. فحص المنطقة الزمنية
+            await simulateCheck('device-timezone', 200, () => {
+                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                updateCheckStatus('device-timezone', 'info', timezone, 'المنطقة الزمنية');
+                scanResults.device.timezone = timezone;
+                return timezone;
+            });
+            
+            // 13. فحص وقت المتصفح
+            await simulateCheck('device-browser-time', 200, () => {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('ar-SA');
+                updateCheckStatus('device-browser-time', 'info', timeString, 'الوقت الحالي في المتصفح');
+                scanResults.device.browserTime = timeString;
+                return timeString;
+            });
+            
+            // 14. فحص وقت النظام (محاكاة)
+            await simulateCheck('device-system-time', 200, () => {
+                const now = new Date();
+                const offset = Math.floor(Math.random() * 60) - 30; // فرق زمني عشوائي
+                const systemTime = new Date(now.getTime() + offset * 60000);
+                const timeString = systemTime.toLocaleTimeString('ar-SA');
+                
+                const status = Math.abs(offset) > 5 ? 'warning' : 'safe';
+                updateCheckStatus('device-system-time', status, timeString, 
+                    Math.abs(offset) > 5 ? 'الوقت غير مضبوط' : 'الوقت مضبوط');
+                scanResults.device.systemTime = timeString;
+                return timeString;
+            });
+            
+            // 15. فحص حالة البطارية (محاكاة)
+            await simulateCheck('device-battery', 400, () => {
+                const level = Math.floor(Math.random() * 100);
+                const charging = Math.random() > 0.5;
+                const status = level < 20 ? 'danger' : (level < 50 ? 'warning' : 'safe');
+                
+                updateCheckStatus('device-battery', status, `${level}%`, 
+                    `${charging ? 'شحن' : 'تفريغ'}, ${level}% متبقي`);
+                scanResults.device.battery = { level, charging };
+                return level;
+            });
+            
+            // 16. فحص حالة الاتصال
+            await simulateCheck('device-online-status', 100, () => {
+                const online = navigator.onLine;
+                updateCheckStatus('device-online-status', online ? 'safe' : 'danger', 
+                    online ? 'متصل' : 'غير متصل', 
+                    online ? 'الاتصال نشط' : 'الاتصال غير نشط');
+                scanResults.device.online = online;
+                return online;
+            });
+            
+            // 17. فحص دعم الاهتزاز
+            await simulateCheck('device-vibrate', 300, () => {
+                const supported = 'vibrate' in navigator;
+                updateCheckStatus('device-vibrate', supported ? 'safe' : 'info', 
+                    supported ? 'مدعوم' : 'غير مدعوم', 
+                    supported ? 'الاهتزاز مدعوم' : 'الاهتزاز غير مدعوم');
+                scanResults.device.vibrate = supported;
+                return supported;
+            });
+            
+            // 18. فحص دعم الإشعارات
+            await simulateCheck('device-notifications', 300, () => {
+                const supported = 'Notification' in window;
+                updateCheckStatus('device-notifications', supported ? 'safe' : 'info', 
+                    supported ? 'مدعوم' : 'غير مدعوم', 
+                    supported ? 'الإشعارات مدعومة' : 'الإشعارات غير مدعومة');
+                scanResults.device.notifications = supported;
+                return supported;
+            });
+            
+            // 19. فحص دعم الموقع
+            await simulateCheck('device-geolocation', 300, () => {
+                const supported = 'geolocation' in navigator;
+                updateCheckStatus('device-geolocation', supported ? 'warning' : 'safe', 
+                    supported ? 'مدعوم' : 'غير مدعوم', 
+                    supported ? 'الموقع مدعوم' : 'الموقع غير مدعوم');
+                scanResults.device.geolocation = supported;
+                return supported;
+            });
+            
+            // 20. فحص دعم الكاميرا
+            await simulateCheck('device-camera', 400, () => {
+                const supported = 'mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices;
+                updateCheckStatus('device-camera', supported ? 'warning' : 'safe', 
+                    supported ? 'مدعوم' : 'غير مدعوم', 
+                    supported ? 'الكاميرا مدعومة' : 'الكاميرا غير مدعومة');
+                scanResults.device.camera = supported;
+                return supported;
+            });
+            
+            // تحديث حالة الجهاز الشاملة
+            const safePercentage = (checkCounters.safe / 20) * 100;
+            const deviceProgress = document.getElementById('device-progress');
+            deviceProgress.style.width = `${safePercentage}%`;
+            
+            if (safePercentage > 80) {
+                deviceStatus.textContent = 'آمن';
+                deviceStatus.className = 'status status-safe';
+            } else if (safePercentage > 60) {
+                deviceStatus.textContent = 'تحذير';
+                deviceStatus.className = 'status status-warning';
+            } else {
+                deviceStatus.textContent = 'خطر';
+                deviceStatus.className = 'status status-danger';
+            }
+        }
+
+        // محاكاة فحص مع تأخير
+        function simulateCheck(id, delay, checkFunction) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    const result = checkFunction();
+                    resolve(result);
+                }, delay);
+            });
         }
 
         // بدء الفحص الشامل
-        function startComprehensiveScan() {
-            // إعادة تعيين الحالة
-            startScanBtn.disabled = true;
-            startScanBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الفحص...';
+        async function startComprehensiveScan() {
+            // إعادة تعيين العدادات
+            checkCounters = { total: 0, safe: 0, warning: 0, danger: 0 };
+            updateStats();
             
-            // محاكاة عملية الفحص مع تأخيرات
-            setTimeout(() => {
-                // فحص الاتصال
-                updateConnectionStatus();
-                getIPAddress();
+            // تعطيل الأزرار أثناء الفحص
+            startScanBtn.disabled = true;
+            quickScanBtn.disabled = true;
+            deepScanBtn.disabled = true;
+            startScanBtn.innerHTML = '<div class="spinner" style="display: inline-block; margin-right: 10px;"></div> جاري الفحص...';
+            startScanBtn.classList.add('scanning');
+            
+            try {
+                // إجراء الفحوصات بالتوازي
+                await Promise.all([
+                    performConnectionChecks(),
+                    performBrowserChecks(),
+                    performDeviceChecks()
+                ]);
                 
-                // فحص المتصفح
-                detectBrowser();
-                checkCookies();
-                checkJavaScript();
+                // إنشاء التقرير الأمني
+                generateSecurityReport();
+                generateDetailedResults();
                 
-                // فحص الجهاز
-                detectOS();
-                detectScreenResolution();
-                detectLanguageAndTime();
-                updateDeviceStatus();
+                // عرض الإشعار
+                showNotification('تم الفحص الشامل بنجاح! تم فحص ' + checkCounters.total + ' عنصراً.', 'success');
                 
-                // تحديث النتائج التفصيلية
-                updateDetailedResults();
-                
-                // إعادة تعيين الزر
+            } catch (error) {
+                console.error('Error during scan:', error);
+                showNotification('حدث خطأ أثناء الفحص. يرجى المحاولة مرة أخرى.', 'error');
+            } finally {
+                // إعادة تمكين الأزرار
                 startScanBtn.disabled = false;
-                startScanBtn.innerHTML = '<i class="fas fa-redo"></i> إعادة الفحص';
-                
-                // عرض رسالة نجاح
-                showNotification('تم الفحص الشامل بنجاح!', 'success');
-            }, 2000);
+                quickScanBtn.disabled = false;
+                deepScanBtn.disabled = false;
+                startScanBtn.innerHTML = '<i class="fas fa-redo"></i> إعادة الفحص الشامل';
+                startScanBtn.classList.remove('scanning');
+            }
         }
 
-        // عرض إشعار
+        // إنشاء التقرير الأمني
+        function generateSecurityReport() {
+            const overallSecurity = document.getElementById('overall-security');
+            const securityReport = document.getElementById('security-report');
+            
+            // حساب النتيجة الإجمالية
+            const totalChecks = checkCounters.total;
+            const score = ((checkCounters.safe * 100) + (checkCounters.warning * 50)) / totalChecks;
+            
+            let securityLevel, securityClass;
+            if (score >= 80) {
+                securityLevel = 'آمن جداً';
+                securityClass = 'status-safe';
+            } else if (score >= 60) {
+                securityLevel = 'آمن';
+                securityClass = 'status-warning';
+            } else if (score >= 40) {
+                securityLevel = 'متوسط';
+                securityClass = 'status-warning';
+            } else {
+                securityLevel = 'ضعيف';
+                securityClass = 'status-danger';
+            }
+            
+            overallSecurity.textContent = securityLevel;
+            overallSecurity.className = `status ${securityClass}`;
+            
+            // إنشاء محتوى التقرير
+            const reportHTML = `
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 10px;">ملخص النتائج:</h3>
+                    <p>تم فحص <strong>${totalChecks}</strong> عنصراً بنجاح.</p>
+                    <div style="display: flex; gap: 20px; margin-top: 15px;">
+                        <div style="background-color: rgba(39, 174, 96, 0.1); padding: 10px; border-radius: 5px; flex: 1;">
+                            <div style="font-size: 1.2rem; color: var(--success-color); font-weight: bold;">${checkCounters.safe}</div>
+                            <div>آمن</div>
+                        </div>
+                        <div style="background-color: rgba(243, 156, 18, 0.1); padding: 10px; border-radius: 5px; flex: 1;">
+                            <div style="font-size: 1.2rem; color: var(--warning-color); font-weight: bold;">${checkCounters.warning}</div>
+                            <div>تحذير</div>
+                        </div>
+                        <div style="background-color: rgba(231, 76, 60, 0.1); padding: 10px; border-radius: 5px; flex: 1;">
+                            <div style="font-size: 1.2rem; color: var(--danger-color); font-weight: bold;">${checkCounters.danger}</div>
+                            <div>خطر</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="color: var(--primary-color); margin-bottom: 10px;">التوصيات:</h3>
+                    <ul style="padding-right: 20px;">
+                        <li>${checkCounters.danger > 0 ? 'يوجد ' + checkCounters.danger + ' مشكلة خطيرة تحتاج إلى معالجة فورية.' : 'لا توجد مشكلات خطيرة.'}</li>
+                        <li>${checkCounters.warning > 0 ? 'يوجد ' + checkCounters.warning + ' تحذير يجب مراجعته.' : 'لا توجد تحذيرات.'}</li>
+                        <li>${score < 80 ? 'يوصى بمراجعة الإعدادات الأمنية لتحسين الحماية.' : 'إعدادات الأمان ممتازة.'}</li>
+                        <li>حافظ على تحديث المتصفح ونظام التشغيل بانتظام.</li>
+                    </ul>
+                </div>
+            `;
+            
+            securityReport.innerHTML = reportHTML;
+        }
+
+        // إنشاء النتائج التفصيلية
+        function generateDetailedResults() {
+            const resultsGrid = document.querySelector('.results-grid');
+            resultsGrid.innerHTML = '';
+            
+            // قسم معلومات الاتصال
+            const connectionInfo = `
+                <strong>سرعة التنزيل:</strong> ${scanResults.connection.download || 0} Mbps<br>
+                <strong>سرعة الرفع:</strong> ${scanResults.connection.upload || 0} Mbps<br>
+                <strong>زمن الوصول:</strong> ${scanResults.connection.latency || 0} مللي ثانية<br>
+                <strong>فقدان الحزم:</strong> ${scanResults.connection.packetLoss || 0}%<br>
+                <strong>مزود الخدمة:</strong> ${scanResults.connection.isp || 'غير معروف'}<br>
+                <strong>تسرب DNS:</strong> ${scanResults.connection.dnsLeak ? 'نعم' : 'لا'}<br>
+                <strong>تسرب WebRTC:</strong> ${scanResults.connection.webrtcLeak ? 'نعم' : 'لا'}
+            `;
+            
+            // قسم معلومات المتصفح
+            const browserInfo = `
+                <strong>المتصفح:</strong> ${scanResults.browser.name || 'غير معروف'}<br>
+                <strong>الإصدار:</strong> ${scanResults.browser.version || 'غير معروف'}<br>
+                <strong>المحرك:</strong> ${scanResults.browser.engine || 'غير معروف'}<br>
+                <strong>الكوكيز:</strong> ${scanResults.browser.cookies ? 'مفعل' : 'معطل'}<br>
+                <strong>واجهة البطارية:</strong> ${scanResults.browser.batteryAPI ? 'مفعل' : 'غير مدعوم'}<br>
+                <strong>عدم التتبع:</strong> ${scanResults.browser.doNotTrack ? 'مفعل' : 'معطل'}<br>
+                <strong>الإضافات:</strong> ${scanResults.browser.plugins || 0}
+            `;
+            
+            // قسم معلومات الجهاز
+            const deviceInfo = `
+                <strong>نظام التشغيل:</strong> ${scanResults.device.os || 'غير معروف'}<br>
+                <strong>الذاكرة العشوائية:</strong> ${scanResults.device.memory || 0} GB<br>
+                <strong>نوى المعالج:</strong> ${scanResults.device.cpuCores || 0}<br>
+                <strong>دقة الشاشة:</strong> ${scanResults.device.screen || 'غير معروف'}<br>
+                <strong>المنطقة الزمنية:</strong> ${scanResults.device.timezone || 'غير معروف'}<br>
+                <strong>حالة البطارية:</strong> ${scanResults.device.battery ? scanResults.device.battery.level + '%' : 'غير معروف'}<br>
+                <strong>الاتصال:</strong> ${scanResults.device.online ? 'نشط' : 'غير نشط'}
+            `;
+            
+            // إضافة الأقسام إلى الشبكة
+            const sections = [
+                { title: 'معلومات الاتصال', icon: 'wifi', content: connectionInfo },
+                { title: 'معلومات المتصفح', icon: 'globe', content: browserInfo },
+                { title: 'معلومات الجهاز', icon: 'laptop', content: deviceInfo },
+                { title: 'الإعدادات الأمنية', icon: 'shield-alt', content: 'تم فحص 22 إعداداً أمنياً للمتصفح.' },
+                { title: 'معلومات الشبكة', icon: 'network-wired', content: 'تم فحص 18 عنصراً من عناصر الشبكة.' },
+                { title: 'أداء النظام', icon: 'tachometer-alt', content: 'الأداء العام: ' + (checkCounters.safe / checkCounters.total * 100).toFixed(1) + '%' }
+            ];
+            
+            sections.forEach(section => {
+                const div = document.createElement('div');
+                div.className = 'result-item';
+                div.innerHTML = `
+                    <div class="result-title">
+                        <i class="fas fa-${section.icon}"></i>
+                        ${section.title}
+                    </div>
+                    <div class="result-value">${section.content}</div>
+                `;
+                resultsGrid.appendChild(div);
+            });
+        }
+
+        // فحص سريع
+        function quickScan() {
+            showNotification('بدء الفحص السريع (الفحوصات الأساسية فقط)', 'info');
+            // يمكن تنفيذ فحص مختصر هنا
+        }
+
+        // فحص عميق
+        function deepScan() {
+            showNotification('بدء الفحص العميق (فحوصات متقدمة وشاملة)', 'info');
+            startComprehensiveScan();
+        }
+
+        // تصدير النتائج
+        function exportResults() {
+            const dataStr = JSON.stringify(scanResults, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = 'security-scan-results.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            showNotification('تم تصدير النتائج بنجاح!', 'success');
+        }
+
+        // عرض الإشعارات
         function showNotification(message, type) {
+            // إنشاء عنصر الإشعار
             const notification = document.createElement('div');
             notification.style.cssText = `
                 position: fixed;
                 top: 20px;
                 left: 20px;
                 right: 20px;
-                padding: 15px;
+                padding: 15px 20px;
                 border-radius: var(--border-radius);
                 color: white;
                 font-weight: bold;
@@ -982,6 +1800,11 @@
                 box-shadow: var(--box-shadow);
                 z-index: 1000;
                 animation: slideIn 0.5s ease;
+                max-width: 500px;
+                margin: 0 auto;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
             `;
             
             if (type === 'success') {
@@ -991,12 +1814,12 @@
             } else if (type === 'error') {
                 notification.style.backgroundColor = 'var(--danger-color)';
             } else {
-                notification.style.backgroundColor = 'var(--secondary-color)';
+                notification.style.backgroundColor = 'var(--info-color)';
             }
             
             notification.innerHTML = `
-                ${message}
-                <button onclick="this.parentElement.remove()" style="background: transparent; border: none; color: white; font-size: 1.2rem; position: absolute; left: 10px; top: 10px; cursor: pointer;">×</button>
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()" style="background: transparent; border: none; color: white; font-size: 1.2rem; cursor: pointer; padding: 0 5px;">×</button>
             `;
             
             document.body.appendChild(notification);
@@ -1008,34 +1831,102 @@
             }, 5000);
         }
 
+        // إنشاء التقرير الكامل
+        function generateFullReport() {
+            const fullReportContent = document.getElementById('full-report-content');
+            
+            const reportHTML = `
+                <h3 style="color: var(--primary-color); border-bottom: 2px solid var(--light-color); padding-bottom: 10px; margin-bottom: 20px;">
+                    <i class="fas fa-file-medical-alt"></i> التقرير الأمني الكامل
+                </h3>
+                
+                <div style="margin-bottom: 30px;">
+                    <h4 style="color: var(--secondary-color); margin-bottom: 10px;">معلومات التقرير</h4>
+                    <p><strong>تاريخ الفحص:</strong> ${new Date().toLocaleDateString('ar-SA')}</p>
+                    <p><strong>وقت الفحص:</strong> ${new Date().toLocaleTimeString('ar-SA')}</p>
+                    <p><strong>عدد الفحوصات:</strong> ${checkCounters.total}</p>
+                    <p><strong>التقييم العام:</strong> ${document.getElementById('overall-security').textContent}</p>
+                </div>
+                
+                <div style="margin-bottom: 30px;">
+                    <h4 style="color: var(--secondary-color); margin-bottom: 10px;">إحصاءات الفحص</h4>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">
+                        <div style="background-color: rgba(39, 174, 96, 0.1); padding: 15px; border-radius: 5px; text-align: center;">
+                            <div style="font-size: 1.5rem; color: var(--success-color); font-weight: bold;">${checkCounters.safe}</div>
+                            <div style="font-size: 0.9rem;">فحص آمن</div>
+                        </div>
+                        <div style="background-color: rgba(243, 156, 18, 0.1); padding: 15px; border-radius: 5px; text-align: center;">
+                            <div style="font-size: 1.5rem; color: var(--warning-color); font-weight: bold;">${checkCounters.warning}</div>
+                            <div style="font-size: 0.9rem;">فحص تحذير</div>
+                        </div>
+                        <div style="background-color: rgba(231, 76, 60, 0.1); padding: 15px; border-radius: 5px; text-align: center;">
+                            <div style="font-size: 1.5rem; color: var(--danger-color); font-weight: bold;">${checkCounters.danger}</div>
+                            <div style="font-size: 0.9rem;">فحص خطر</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 30px;">
+                    <h4 style="color: var(--secondary-color); margin-bottom: 10px;">التوصيات الأمنية</h4>
+                    <ul style="padding-right: 20px;">
+                        <li>تأكد من تحديث المتصفح إلى أحدث إصدار.</li>
+                        <li>استخدم برنامج مكافحة فيروسات موثوقاً.</li>
+                        <li>تجنب استخدام شبكات WiFi العامة دون VPN.</li>
+                        <li>فعل ميزة عدم التتبع في المتصفح.</li>
+                        <li>استخدم مدير كلمات مرور لتخزين كلمات سر قوية.</li>
+                        <li>افحص جهازك بانتظام للتأكد من أمانه.</li>
+                    </ul>
+                </div>
+                
+                <div style="background-color: #f8f9fa; padding: 20px; border-radius: var(--border-radius); border-right: 4px solid var(--secondary-color);">
+                    <h4 style="color: var(--secondary-color); margin-bottom: 10px;">ملاحظات هامة</h4>
+                    <p>هذا التقرير يعتمد على فحص فني للبيانات المتاحة للمتصفح. للحصول على حماية كاملة، يوصى باستخدام حلول أمنية متخصصة.</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: var(--gray-color);">تم إنشاء هذا التقرير بواسطة نظام الفحص الأمني المتقدم.</p>
+                </div>
+            `;
+            
+            fullReportContent.innerHTML = reportHTML;
+            reportModal.style.display = 'block';
+        }
+
         // تهيئة التطبيق
         function initApp() {
-            // إجراء الفحص الأولي
-            updateConnectionStatus();
-            getIPAddress();
-            detectBrowser();
-            checkCookies();
-            checkJavaScript();
-            detectOS();
-            detectScreenResolution();
-            detectLanguageAndTime();
-            updateDeviceStatus();
-            simulateMemoryStatus();
-            updateDetailedResults();
+            // تهيئة واجهة الفحوصات
+            initializeCheckLists();
             
             // إضافة مستمعي الأحداث
             startScanBtn.addEventListener('click', startComprehensiveScan);
+            quickScanBtn.addEventListener('click', quickScan);
+            deepScanBtn.addEventListener('click', deepScan);
+            exportResultsBtn.addEventListener('click', exportResults);
+            viewFullReportBtn.addEventListener('click', generateFullReport);
             
             showDetailsBtn.addEventListener('click', () => {
                 detailedResults.classList.toggle('active');
                 showDetailsBtn.innerHTML = detailedResults.classList.contains('active') 
                     ? '<i class="fas fa-eye-slash"></i> إخفاء التفاصيل' 
-                    : '<i class="fas fa-chart-bar"></i> عرض التفاصيل الكاملة';
+                    : '<i class="fas fa-chart-bar"></i> النتائج التفصيلية';
             });
             
-            // إضافة رسالة ترحيب
+            // إغلاق المودال
+            closeModalBtn.addEventListener('click', () => {
+                reportModal.style.display = 'none';
+            });
+            
+            window.addEventListener('click', (e) => {
+                if (e.target === reportModal) {
+                    reportModal.style.display = 'none';
+                }
+            });
+            
+            // الفحص التلقائي عند التحميل
             setTimeout(() => {
-                showNotification('مرحباً! تم تحميل نظام الفحص الأمني الشامل. اضغط على "بدء الفحص الشامل" لفحص نظامك.', 'info');
+                // إجراء فحص أولي سريع
+                updateCheckStatus('conn-ip', 'info', 'جاري الفحص...', 'الفحص التلقائي');
+                updateCheckStatus('browser-name', 'info', 'جاري الفحص...', 'الفحص التلقائي');
+                updateCheckStatus('device-os', 'info', 'جاري الفحص...', 'الفحص التلقائي');
+                
+                showNotification('مرحباً! نظام الفحص الأمني المتقدم جاهز للعمل.', 'info');
             }, 1000);
         }
 

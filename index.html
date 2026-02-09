@@ -3,9 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شات الذكاء الاصطناعي المتقدم</title>
+    <title>فحص الأمان الشامل - سكان متكامل للاتصال والمتصفح والجهاز</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* CSS Variables */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --gray-color: #7f8c8d;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        /* Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -13,1241 +29,1018 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        :root {
-            --primary-color: #10a37f;
-            --primary-dark: #0d8c6d;
-            --secondary-color: #343541;
-            --chat-bg: #444654;
-            --user-bg: #343541;
-            --text-color: #ececf1;
-            --border-color: #565869;
-            --sidebar-bg: #202123;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-        }
-
         body {
-            background-color: var(--secondary-color);
-            color: var(--text-color);
-            height: 100vh;
-            overflow: hidden;
+            background-color: #f8f9fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+            direction: rtl;
         }
 
-        .app-container {
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
             display: flex;
-            height: 100vh;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        /* Sidebar Styles */
-        .sidebar {
-            width: 260px;
-            background-color: var(--sidebar-bg);
-            display: flex;
-            flex-direction: column;
-            transition: var(--transition);
-            z-index: 10;
-        }
-
-        .sidebar-header {
-            padding: 16px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .sidebar-header h2 {
-            font-size: 18px;
+        .logo {
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .sidebar-header h2 i {
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Main Content */
+        main {
+            padding: 2rem 0;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-color);
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4rem;
             color: var(--primary-color);
         }
 
-        .new-chat-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 6px;
-            margin-top: 15px;
-            width: 100%;
-            font-size: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: var(--transition);
+        .card-title i {
+            font-size: 1.5rem;
         }
 
-        .new-chat-btn:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .conversations {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px;
-        }
-
-        .conversation-item {
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 5px;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .conversation-item:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .conversation-item.active {
-            background-color: rgba(255, 255, 255, 0.15);
-        }
-
-        .conversation-item i {
-            font-size: 14px;
-            color: #8e8ea0;
-        }
-
-        .conversation-title {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-size: 14px;
-        }
-
-        .sidebar-footer {
-            padding: 16px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .user-info:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: var(--primary-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .user-details {
-            flex: 1;
-        }
-
-        .user-name {
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .user-status {
-            font-size: 12px;
-            color: #8e8ea0;
-        }
-
-        .toggle-sidebar {
-            display: none;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: var(--sidebar-bg);
-            border: none;
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 20;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Main Chat Area */
-        .chat-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .chat-header {
-            padding: 16px 24px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: var(--secondary-color);
-        }
-
-        .chat-title {
-            font-size: 18px;
+        /* Status Indicators */
+        .status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
             font-weight: 600;
         }
 
-        .chat-actions {
+        .status-safe {
+            background-color: rgba(39, 174, 96, 0.2);
+            color: var(--success-color);
+        }
+
+        .status-warning {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: var(--warning-color);
+        }
+
+        .status-danger {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--danger-color);
+        }
+
+        /* Check Items */
+        .check-item {
             display: flex;
-            gap: 10px;
-        }
-
-        .chat-action-btn {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            width: 36px;
-            height: 36px;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
-
-        .chat-action-btn:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .messages-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        .message {
-            display: flex;
-            gap: 20px;
-            max-width: 100%;
-            padding: 20px 0;
-        }
-
-        .message.user {
-            background-color: var(--user-bg);
-        }
-
-        .message.assistant {
-            background-color: var(--chat-bg);
-        }
-
-        .avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-
-        .user .avatar {
-            background-color: #5436da;
-        }
-
-        .assistant .avatar {
-            background-color: var(--primary-color);
-        }
-
-        .message-content {
-            flex: 1;
-            padding-top: 5px;
-            line-height: 1.6;
-            white-space: pre-wrap;
-        }
-
-        .message-content p {
-            margin-bottom: 10px;
-        }
-
-        .message-content code {
-            background-color: rgba(0, 0, 0, 0.2);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 0.9em;
-        }
-
-        .message-content pre {
-            background-color: rgba(0, 0, 0, 0.2);
-            padding: 12px;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 10px 0;
-        }
-
-        .message-content ul, .message-content ol {
-            padding-right: 20px;
-            margin: 10px 0;
-        }
-
-        .message-content li {
-            margin-bottom: 5px;
-        }
-
-        .typing-indicator {
-            display: flex;
-            gap: 5px;
-            padding: 10px 0;
-        }
-
-        .typing-indicator span {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: var(--text-color);
-            opacity: 0.6;
-            animation: typing 1.4s infinite ease-in-out;
-        }
-
-        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
-        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
-
-        @keyframes typing {
-            0%, 80%, 100% { transform: translateY(0); opacity: 0.6; }
-            40% { transform: translateY(-10px); opacity: 1; }
-        }
-
-        /* Input Area */
-        .input-container {
-            padding: 24px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .input-wrapper {
-            position: relative;
-            display: flex;
-        }
-
-        .chat-input {
-            width: 100%;
-            background-color: rgba(64, 65, 79, 0.8);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px 52px 16px 16px;
-            color: var(--text-color);
-            font-size: 16px;
-            resize: none;
-            min-height: 56px;
-            max-height: 200px;
-            line-height: 1.5;
-            transition: var(--transition);
-        }
-
-        .chat-input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            background-color: rgba(64, 65, 79, 1);
-        }
-
-        .send-btn {
-            position: absolute;
-            left: 12px;
-            bottom: 12px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
-
-        .send-btn:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .send-btn:disabled {
-            background-color: #6e6e80;
-            cursor: not-allowed;
-        }
-
-        .input-footer {
-            display: flex;
-            justify-content: center;
-            margin-top: 12px;
-            font-size: 12px;
-            color: #8e8ea0;
-        }
-
-        /* Welcome Screen */
-        .welcome-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            text-align: center;
-            padding: 0 24px;
-        }
-
-        .welcome-title {
-            font-size: 32px;
-            margin-bottom: 16px;
-            background: linear-gradient(90deg, var(--primary-color), #5436da);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .welcome-subtitle {
-            font-size: 18px;
-            color: #8e8ea0;
-            margin-bottom: 40px;
-            max-width: 600px;
-        }
-
-        .capabilities {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            max-width: 800px;
-            margin-bottom: 40px;
-        }
-
-        .capability {
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 20px;
-            width: 240px;
-        }
-
-        .capability i {
-            font-size: 24px;
-            color: var(--primary-color);
-            margin-bottom: 12px;
-        }
-
-        .capability h3 {
-            font-size: 16px;
-            margin-bottom: 8px;
-        }
-
-        .capability p {
-            font-size: 14px;
-            color: #8e8ea0;
-        }
-
-        /* API Configuration Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            padding: 20px;
-        }
-
-        .modal {
-            background-color: var(--secondary-color);
-            border-radius: 12px;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-        }
-
-        .modal-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
         }
 
-        .modal-header h3 {
-            font-size: 18px;
+        .check-item:last-child {
+            border-bottom: none;
         }
 
-        .close-modal {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-size: 20px;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
+        .check-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .check-icon {
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: var(--transition);
+            font-size: 1rem;
         }
 
-        .close-modal:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+        .check-icon-safe {
+            background-color: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
         }
 
-        .modal-body {
-            padding: 20px;
+        .check-icon-warning {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--warning-color);
         }
 
-        .form-group {
-            margin-bottom: 20px;
+        .check-icon-danger {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
+        .check-icon-neutral {
+            background-color: rgba(127, 140, 141, 0.1);
+            color: var(--gray-color);
         }
 
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 12px;
-            background-color: rgba(64, 65, 79, 0.8);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            color: var(--text-color);
-            font-size: 14px;
+        /* Progress Bars */
+        .progress-container {
+            margin-top: 15px;
         }
 
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary-color);
+        .progress-bar {
+            height: 10px;
+            background-color: #eee;
+            border-radius: 5px;
+            overflow: hidden;
         }
 
-        .modal-footer {
-            padding: 20px;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--secondary-color), var(--success-color));
+            width: 0;
+            transition: width 1s ease;
         }
 
+        /* Button Styles */
         .btn {
-            padding: 10px 20px;
-            border-radius: 6px;
+            padding: 12px 24px;
             border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
             transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .btn-primary {
-            background-color: var(--primary-color);
+            background-color: var(--secondary-color);
             color: white;
         }
 
         .btn-primary:hover {
-            background-color: var(--primary-dark);
+            background-color: #2980b9;
         }
 
-        .btn-secondary {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: var(--text-color);
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
         }
 
-        .btn-secondary:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+        .btn-success:hover {
+            background-color: #219653;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-block {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        /* Action Section */
+        .action-section {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        /* Detailed Results */
+        .detailed-results {
+            margin-top: 3rem;
+            display: none;
+        }
+
+        .detailed-results.active {
+            display: block;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .result-item {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.2rem;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+            border-right: 4px solid var(--secondary-color);
+        }
+
+        .result-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+
+        .result-value {
+            color: var(--gray-color);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            margin: 1.5rem 0;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            color: #bbb;
+            font-size: 0.9rem;
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .sidebar {
-                position: fixed;
-                top: 0;
-                right: 0;
-                height: 100%;
-                transform: translateX(100%);
-            }
-            
-            .sidebar.active {
-                transform: translateX(0);
-            }
-            
-            .toggle-sidebar {
-                display: flex;
-            }
-            
-            .capabilities {
+            .header-content {
                 flex-direction: column;
-                align-items: center;
+                gap: 15px;
             }
             
-            .capability {
-                width: 100%;
-                max-width: 300px;
+            .nav-links {
+                gap: 15px;
             }
-        }
-
-        /* Scrollbar Styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.1);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.3);
+            
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h2><i class="fas fa-robot"></i> الذكاء الاصطناعي</h2>
-                <button class="new-chat-btn" id="newChatBtn">
-                    <i class="fas fa-plus"></i> محادثة جديدة
-                </button>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>فحص الأمان الشامل</h1>
             </div>
-            
-            <div class="conversations" id="conversationsList">
-                <!-- Conversations will be dynamically added here -->
-            </div>
-            
-            <div class="sidebar-footer">
-                <div class="user-info">
-                    <div class="user-avatar">م</div>
-                    <div class="user-details">
-                        <div class="user-name">مستخدم</div>
-                        <div class="user-status">متصل</div>
+            <nav class="nav-links">
+                <a href="#"><i class="fas fa-home"></i> الرئيسية</a>
+                <a href="#"><i class="fas fa-info-circle"></i> حول</a>
+                <a href="#"><i class="fas fa-envelope"></i> اتصل بنا</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Dashboard -->
+        <section class="dashboard">
+            <!-- Connection Check Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-wifi"></i> فحص الاتصال بالإنترنت
+                    </h2>
+                    <span id="connection-status" class="status status-safe">آمن</span>
+                </div>
+                <div class="card-body">
+                    <div class="check-item">
+                        <div class="check-info">
+                            <div class="check-icon check-icon-safe">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div>
+                                <h3>سرعة الاتصال</h3>
+                                <p id="connection-speed">فحص السرعة...</p>
+                            </div>
+                        </div>
                     </div>
-                    <i class="fas fa-cog" id="settingsBtn"></i>
+                    <div class="check-item">
+                        <div class="check-info">
+                            <div class="check-icon check-icon-safe">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div>
+                                <h3>استقرار الاتصال</h3>
+                                <p id="connection-stability">فحص الاستقرار...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-info">
+                            <div class="check-icon check-icon-safe">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div>
+                                <h3>عنوان IP</h3>
+                                <p id="ip-address">جاري التحميل...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <p>جودة الاتصال</p>
+                        <div class="progress-bar">
+                            <div id="connection-progress" class="progress-fill"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Main Chat Area -->
-        <div class="chat-container">
-            <button class="toggle-sidebar" id="toggleSidebar">
-                <i class="fas fa-bars"></i>
+
+            <!-- Browser Check Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-globe"></i> فحص المتصفح
+                    </h2>
+                    <span id="browser-status" class="status status-warning">تحذير</span>
+                </div>
+                <div class="card-body">
+                    <div class="check-item">
+                        <div class="check-info">
+                            <div class="check-icon check-icon-safe">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div>
+                                <h3>نوع المتصفح</h3>
+                                <p id="browser-name">جاري التحميل...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-info">
+                            <div class="check-icon check-icon-warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div>
+                                <h3>الإصدار</h3>
+                                <p id="browser-version">قديم - يوصى بالتحديث</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-info">
+                            <div class="check-icon check-icon-safe">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div>
+                                <h3>الكوكيز مفعلة</h3>
+                                <p id="cookies-status">مفعلة</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-info">
+                            <div class="check-icon check-icon-danger">
+                                <i class="fas fa-times"></i>
+                            </div>
+                            <div>
+                                <h3>JavaScript</h3>
+                                <p id="javascript-status">مفعل</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Device Check Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-laptop"></i> فحص الجهاز
+                    </h2>
+                    <span id="device-status" class="status status-safe">آمن</span>
+                </div>
+                <div class="card-body">
+                    <div class="check-item">
+                        <div class="check-info">
+                            <div class="check-icon check-icon-safe">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div>
+                                <h3>نظام التشغيل</h3>
+                                <p id="os-type">جاري التحميل...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-info">
+                            <div class="check-icon check-icon-warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div>
+                                <h3>الشاشة</h3>
+                                <p id="screen-resolution">غير محسن للأجهزة المحمولة</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-info">
+                            <div class="check-icon check-icon-safe">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div>
+                                <h3>اللغة والوقت</h3>
+                                <p id="language-time">جاري التحميل...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-info">
+                            <div class="check-icon check-icon-safe">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div>
+                                <h3>الذاكرة المتاحة</h3>
+                                <p id="memory-status">جيد</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Action Buttons -->
+        <section class="action-section">
+            <button id="start-scan" class="btn btn-primary btn-lg">
+                <i class="fas fa-play-circle"></i> بدء الفحص الشامل
             </button>
-            
-            <div class="chat-header">
-                <div class="chat-title" id="currentChatTitle">شات الذكاء الاصطناعي</div>
-                <div class="chat-actions">
-                    <button class="chat-action-btn" id="clearChatBtn" title="مسح المحادثة">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                    <button class="chat-action-btn" id="toggleDarkMode" title="تبديل السمة">
-                        <i class="fas fa-moon"></i>
-                    </button>
+            <button id="show-details" class="btn btn-success">
+                <i class="fas fa-chart-bar"></i> عرض التفاصيل الكاملة
+            </button>
+        </section>
+
+        <!-- Detailed Results -->
+        <section id="detailed-results" class="detailed-results">
+            <h2><i class="fas fa-file-alt"></i> النتائج التفصيلية للفحص</h2>
+            <div class="results-grid">
+                <div class="result-item">
+                    <div class="result-title">معلومات الاتصال</div>
+                    <div class="result-value" id="detailed-connection"></div>
+                </div>
+                <div class="result-item">
+                    <div class="result-title">معلومات المتصفح</div>
+                    <div class="result-value" id="detailed-browser"></div>
+                </div>
+                <div class="result-item">
+                    <div class="result-title">معلومات الجهاز</div>
+                    <div class="result-value" id="detailed-device"></div>
+                </div>
+                <div class="result-item">
+                    <div class="result-title">الإعدادات الأمنية</div>
+                    <div class="result-value" id="detailed-security"></div>
+                </div>
+                <div class="result-item">
+                    <div class="result-title">معلومات الشبكة</div>
+                    <div class="result-value" id="detailed-network"></div>
+                </div>
+                <div class="result-item">
+                    <div class="result-title">أداء النظام</div>
+                    <div class="result-value" id="detailed-performance"></div>
                 </div>
             </div>
-            
-            <div class="messages-container" id="messagesContainer">
-                <!-- Welcome Screen -->
-                <div class="welcome-screen" id="welcomeScreen">
-                    <h1 class="welcome-title">شات الذكاء الاصطناعي المتقدم</h1>
-                    <p class="welcome-subtitle">اطرح أي سؤال وسأحاول تقديم أفضل إجابة ممكنة. يمكنني المساعدة في البرمجة، الكتابة، التحليل، وغير ذلك.</p>
-                    
-                    <div class="capabilities">
-                        <div class="capability">
-                            <i class="fas fa-lightbulb"></i>
-                            <h3>أفكار إبداعية</h3>
-                            <p>يمكنني مساعدتك في توليد أفكار إبداعية لمشاريعك</p>
-                        </div>
-                        <div class="capability">
-                            <i class="fas fa-code"></i>
-                            <h3>كتابة وتصحيح الشيفرات</h3>
-                            <p>أساعد في كتابة وتصحيح الشيفرات البرمجية بلغات متعددة</p>
-                        </div>
-                        <div class="capability">
-                            <i class="fas fa-book"></i>
-                            <h3>شرح المفاهيم</h3>
-                            <p>أشرح المفاهيم المعقدة بطريقة مبسطة وسهلة الفهم</p>
-                        </div>
-                        <div class="capability">
-                            <i class="fas fa-language"></i>
-                            <h3>ترجمة وتحليل النصوص</h3>
-                            <p>أترجم النصوص بين اللغات وأحلل المحتوى المكتوب</p>
-                        </div>
-                    </div>
-                    
-                    <p class="input-footer">ابدأ بالكتابة في المربع أدناه لبدء المحادثة</p>
-                </div>
-                
-                <!-- Messages will be dynamically added here -->
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h2>فحص الأمان الشامل</h2>
             </div>
-            
-            <div class="input-container">
-                <div class="input-wrapper">
-                    <textarea 
-                        class="chat-input" 
-                        id="chatInput" 
-                        placeholder="اكتب رسالتك هنا... (اضغط Enter للإرسال، Shift+Enter للسطر الجديد)"
-                        rows="1"
-                    ></textarea>
-                    <button class="send-btn" id="sendBtn">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
-                <div class="input-footer">
-                    <span>شات الذكاء الاصطناعي يمكن أن يخطئ في بعض المعلومات. تأكد من التحقق من المعلومات المهمة.</span>
-                </div>
+            <p>منصة متكاملة لفحص أمان الاتصال والمتصفح والجهاز</p>
+            <div class="footer-links">
+                <a href="#"><i class="fas fa-shield-alt"></i> سياسة الخصوصية</a>
+                <a href="#"><i class="fas fa-file-contract"></i> الشروط والأحكام</a>
+                <a href="#"><i class="fas fa-question-circle"></i> المساعدة</a>
             </div>
+            <p class="copyright">© 2023 جميع الحقوق محفوظة | تم التطوير بأحدث تقنيات الويب</p>
         </div>
-    </div>
-    
-    <!-- API Configuration Modal -->
-    <div class="modal-overlay" id="apiConfigModal" style="display: none;">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>إعدادات API</h3>
-                <button class="close-modal" id="closeModalBtn">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="apiKey">مفتاح API</label>
-                    <input 
-                        type="password" 
-                        id="apiKey" 
-                        placeholder="أدخل مفتاح API الخاص بك"
-                        value=""
-                    >
-                </div>
-                <div class="form-group">
-                    <label for="apiProvider">مزود API</label>
-                    <select id="apiProvider">
-                        <option value="openai">OpenAI</option>
-                        <option value="custom">مخصص (Custom Endpoint)</option>
-                    </select>
-                </div>
-                <div class="form-group" id="customEndpointGroup" style="display: none;">
-                    <label for="customEndpoint">رابط API المخصص</label>
-                    <input 
-                        type="text" 
-                        id="customEndpoint" 
-                        placeholder="https://api.example.com/v1/chat/completions"
-                        value=""
-                    >
-                </div>
-                <div class="form-group">
-                    <label for="model">النموذج</label>
-                    <select id="model">
-                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                        <option value="gpt-4">GPT-4</option>
-                        <option value="gpt-4-turbo">GPT-4 Turbo</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="temperature">درجة الإبداع (Temperature)</label>
-                    <input 
-                        type="range" 
-                        id="temperature" 
-                        min="0" 
-                        max="1" 
-                        step="0.1" 
-                        value="0.7"
-                    >
-                    <span id="temperatureValue">0.7</span>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancelBtn">إلغاء</button>
-                <button class="btn btn-primary" id="saveApiBtn">حفظ الإعدادات</button>
-            </div>
-        </div>
-    </div>
+    </footer>
 
     <script>
-        // DOM Elements
-        const sidebar = document.getElementById('sidebar');
-        const toggleSidebarBtn = document.getElementById('toggleSidebar');
-        const newChatBtn = document.getElementById('newChatBtn');
-        const conversationsList = document.getElementById('conversationsList');
-        const messagesContainer = document.getElementById('messagesContainer');
-        const welcomeScreen = document.getElementById('welcomeScreen');
-        const chatInput = document.getElementById('chatInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const clearChatBtn = document.getElementById('clearChatBtn');
-        const settingsBtn = document.getElementById('settingsBtn');
-        const apiConfigModal = document.getElementById('apiConfigModal');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const cancelBtn = document.getElementById('cancelBtn');
-        const saveApiBtn = document.getElementById('saveApiBtn');
-        const apiProviderSelect = document.getElementById('apiProvider');
-        const customEndpointGroup = document.getElementById('customEndpointGroup');
-        const temperatureSlider = document.getElementById('temperature');
-        const temperatureValue = document.getElementById('temperatureValue');
-        const currentChatTitle = document.getElementById('currentChatTitle');
+        // عناصر DOM
+        const startScanBtn = document.getElementById('start-scan');
+        const showDetailsBtn = document.getElementById('show-details');
+        const detailedResults = document.getElementById('detailed-results');
+        const connectionProgress = document.getElementById('connection-progress');
+        
+        // عناصر الفحص
+        const connectionStatus = document.getElementById('connection-status');
+        const connectionSpeed = document.getElementById('connection-speed');
+        const connectionStability = document.getElementById('connection-stability');
+        const ipAddress = document.getElementById('ip-address');
+        
+        const browserStatus = document.getElementById('browser-status');
+        const browserName = document.getElementById('browser-name');
+        const browserVersion = document.getElementById('browser-version');
+        const cookiesStatus = document.getElementById('cookies-status');
+        const javascriptStatus = document.getElementById('javascript-status');
+        
+        const deviceStatus = document.getElementById('device-status');
+        const osType = document.getElementById('os-type');
+        const screenResolution = document.getElementById('screen-resolution');
+        const languageTime = document.getElementById('language-time');
+        const memoryStatus = document.getElementById('memory-status');
+        
+        // عناصر النتائج التفصيلية
+        const detailedConnection = document.getElementById('detailed-connection');
+        const detailedBrowser = document.getElementById('detailed-browser');
+        const detailedDevice = document.getElementById('detailed-device');
+        const detailedSecurity = document.getElementById('detailed-security');
+        const detailedNetwork = document.getElementById('detailed-network');
+        const detailedPerformance = document.getElementById('detailed-performance');
 
-        // State variables
-        let conversations = JSON.parse(localStorage.getItem('ai-chat-conversations')) || [];
-        let currentConversationId = null;
-        let isWaitingForResponse = false;
-        let apiSettings = JSON.parse(localStorage.getItem('ai-chat-api-settings')) || {
-            apiKey: '',
-            apiProvider: 'openai',
-            customEndpoint: '',
-            model: 'gpt-3.5-turbo',
-            temperature: 0.7
-        };
-
-        // Initialize the app
-        function init() {
-            // Load API settings
-            loadApiSettings();
+        // محاكاة سرعة الاتصال
+        function simulateConnectionSpeed() {
+            const speeds = ['بطيء', 'متوسط', 'جيد', 'سريع جداً'];
+            const randomSpeed = speeds[Math.floor(Math.random() * speeds.length)];
+            const randomPing = Math.floor(Math.random() * 200) + 20;
             
-            // Load conversations
-            loadConversations();
+            connectionSpeed.textContent = `${randomSpeed} (${randomPing}ms)`;
             
-            // If there are conversations, show the last one
-            if (conversations.length > 0) {
-                switchToConversation(conversations[conversations.length - 1].id);
-            }
-            
-            // Setup event listeners
-            setupEventListeners();
-            
-            // Auto-resize textarea
-            setupTextareaAutoResize();
-        }
-
-        // Setup event listeners
-        function setupEventListeners() {
-            // Toggle sidebar on mobile
-            toggleSidebarBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('active');
-            });
-
-            // New chat button
-            newChatBtn.addEventListener('click', createNewConversation);
-
-            // Send message on button click
-            sendBtn.addEventListener('click', sendMessage);
-
-            // Send message on Enter key (without Shift)
-            chatInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-
-            // Clear chat button
-            clearChatBtn.addEventListener('click', () => {
-                if (currentConversationId && confirm('هل أنت متأكد من رغبتك في مسح هذه المحادثة؟')) {
-                    clearCurrentConversation();
-                }
-            });
-
-            // Settings button
-            settingsBtn.addEventListener('click', () => {
-                apiConfigModal.style.display = 'flex';
-            });
-
-            // Close modal buttons
-            closeModalBtn.addEventListener('click', () => {
-                apiConfigModal.style.display = 'none';
-            });
-
-            cancelBtn.addEventListener('click', () => {
-                apiConfigModal.style.display = 'none';
-            });
-
-            // Save API settings
-            saveApiBtn.addEventListener('click', saveApiSettings);
-
-            // API provider change
-            apiProviderSelect.addEventListener('change', () => {
-                if (apiProviderSelect.value === 'custom') {
-                    customEndpointGroup.style.display = 'block';
-                } else {
-                    customEndpointGroup.style.display = 'none';
-                }
-            });
-
-            // Temperature slider
-            temperatureSlider.addEventListener('input', () => {
-                temperatureValue.textContent = temperatureSlider.value;
-            });
-
-            // Close modal when clicking outside
-            window.addEventListener('click', (e) => {
-                if (e.target === apiConfigModal) {
-                    apiConfigModal.style.display = 'none';
-                }
-            });
-        }
-
-        // Setup textarea auto-resize
-        function setupTextareaAutoResize() {
-            chatInput.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = (this.scrollHeight) + 'px';
-            });
-        }
-
-        // Load API settings into the form
-        function loadApiSettings() {
-            document.getElementById('apiKey').value = apiSettings.apiKey || '';
-            document.getElementById('apiProvider').value = apiSettings.apiProvider || 'openai';
-            document.getElementById('customEndpoint').value = apiSettings.customEndpoint || '';
-            document.getElementById('model').value = apiSettings.model || 'gpt-3.5-turbo';
-            document.getElementById('temperature').value = apiSettings.temperature || 0.7;
-            document.getElementById('temperatureValue').textContent = apiSettings.temperature || 0.7;
-            
-            if (apiSettings.apiProvider === 'custom') {
-                customEndpointGroup.style.display = 'block';
-            }
-        }
-
-        // Save API settings
-        function saveApiSettings() {
-            apiSettings = {
-                apiKey: document.getElementById('apiKey').value,
-                apiProvider: document.getElementById('apiProvider').value,
-                customEndpoint: document.getElementById('customEndpoint').value,
-                model: document.getElementById('model').value,
-                temperature: parseFloat(document.getElementById('temperature').value)
-            };
-            
-            localStorage.setItem('ai-chat-api-settings', JSON.stringify(apiSettings));
-            apiConfigModal.style.display = 'none';
-            
-            alert('تم حفظ إعدادات API بنجاح');
-        }
-
-        // Load conversations to sidebar
-        function loadConversations() {
-            conversationsList.innerHTML = '';
-            
-            conversations.forEach(conversation => {
-                const conversationElement = document.createElement('div');
-                conversationElement.className = `conversation-item ${conversation.id === currentConversationId ? 'active' : ''}`;
-                conversationElement.dataset.id = conversation.id;
-                
-                conversationElement.innerHTML = `
-                    <i class="fas fa-message"></i>
-                    <div class="conversation-title">${conversation.title}</div>
-                `;
-                
-                conversationElement.addEventListener('click', () => {
-                    switchToConversation(conversation.id);
-                    // Close sidebar on mobile
-                    if (window.innerWidth <= 768) {
-                        sidebar.classList.remove('active');
-                    }
-                });
-                
-                conversationsList.appendChild(conversationElement);
-            });
-        }
-
-        // Create a new conversation
-        function createNewConversation() {
-            const newConversation = {
-                id: Date.now().toString(),
-                title: `محادثة جديدة ${conversations.length + 1}`,
-                messages: [],
-                createdAt: new Date().toISOString()
-            };
-            
-            conversations.push(newConversation);
-            localStorage.setItem('ai-chat-conversations', JSON.stringify(conversations));
-            
-            loadConversations();
-            switchToConversation(newConversation.id);
-            
-            // Close sidebar on mobile
-            if (window.innerWidth <= 768) {
-                sidebar.classList.remove('active');
-            }
-        }
-
-        // Switch to a conversation
-        function switchToConversation(conversationId) {
-            currentConversationId = conversationId;
-            const conversation = conversations.find(c => c.id === conversationId);
-            
-            if (!conversation) return;
-            
-            // Update UI
-            currentChatTitle.textContent = conversation.title;
-            
-            // Clear messages container
-            messagesContainer.innerHTML = '';
-            welcomeScreen.style.display = 'none';
-            
-            // Add messages
-            conversation.messages.forEach(message => {
-                addMessageToUI(message.role, message.content, message.id);
-            });
-            
-            // Update active conversation in sidebar
-            document.querySelectorAll('.conversation-item').forEach(item => {
-                if (item.dataset.id === conversationId) {
-                    item.classList.add('active');
-                } else {
-                    item.classList.remove('active');
-                }
-            });
-            
-            // Scroll to bottom
-            scrollToBottom();
-        }
-
-        // Clear current conversation
-        function clearCurrentConversation() {
-            const conversationIndex = conversations.findIndex(c => c.id === currentConversationId);
-            
-            if (conversationIndex !== -1) {
-                conversations[conversationIndex].messages = [];
-                localStorage.setItem('ai-chat-conversations', JSON.stringify(conversations));
-                
-                // Reload messages
-                switchToConversation(currentConversationId);
-            }
-        }
-
-        // Send message
-        async function sendMessage() {
-            const message = chatInput.value.trim();
-            
-            if (!message || isWaitingForResponse) return;
-            
-            // Clear input
-            chatInput.value = '';
-            chatInput.style.height = 'auto';
-            
-            // Add user message to UI
-            const userMessageId = Date.now().toString();
-            addMessageToUI('user', message, userMessageId);
-            
-            // Add to conversation
-            const conversation = conversations.find(c => c.id === currentConversationId);
-            if (conversation) {
-                conversation.messages.push({
-                    id: userMessageId,
-                    role: 'user',
-                    content: message
-                });
-                
-                // Update conversation title if it's the first message
-                if (conversation.messages.length === 1) {
-                    conversation.title = message.substring(0, 30) + (message.length > 30 ? '...' : '');
-                    currentChatTitle.textContent = conversation.title;
-                    loadConversations();
-                }
-                
-                localStorage.setItem('ai-chat-conversations', JSON.stringify(conversations));
+            if (randomSpeed === 'سريع جداً') {
+                connectionSpeed.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-safe';
+                connectionSpeed.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-check"></i>';
+            } else if (randomSpeed === 'بطيء') {
+                connectionSpeed.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-danger';
+                connectionSpeed.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-times"></i>';
             } else {
-                // Create a new conversation if none exists
-                createNewConversation();
-                await new Promise(resolve => setTimeout(resolve, 100));
-                sendMessage();
-                return;
+                connectionSpeed.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-warning';
+                connectionSpeed.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
             }
             
-            // Show typing indicator
-            showTypingIndicator();
-            
-            // Get AI response
-            isWaitingForResponse = true;
-            sendBtn.disabled = true;
-            
-            try {
-                const aiResponse = await getAIResponse(message, conversation.messages);
-                
-                // Remove typing indicator
-                removeTypingIndicator();
-                
-                // Add AI response to UI
-                const aiMessageId = Date.now().toString() + '-ai';
-                addMessageToUI('assistant', aiResponse, aiMessageId);
-                
-                // Add to conversation
-                conversation.messages.push({
-                    id: aiMessageId,
-                    role: 'assistant',
-                    content: aiResponse
-                });
-                
-                localStorage.setItem('ai-chat-conversations', JSON.stringify(conversations));
-                
-            } catch (error) {
-                // Remove typing indicator
-                removeTypingIndicator();
-                
-                // Show error message
-                const errorMessageId = Date.now().toString() + '-error';
-                addMessageToUI('assistant', `حدث خطأ: ${error.message}.\n\nتأكد من إعدادات API الخاصة بك.`, errorMessageId);
-            }
-            
-            isWaitingForResponse = false;
-            sendBtn.disabled = false;
-            
-            // Scroll to bottom
-            scrollToBottom();
+            return randomSpeed;
         }
 
-        // Get AI response from API
-        async function getAIResponse(userMessage, conversationHistory) {
-            // Check if API key is set
-            if (!apiSettings.apiKey && apiSettings.apiProvider === 'openai') {
-                throw new Error('لم يتم تعيين مفتاح API. الرجاء إعداده من خلال إعدادات API.');
-            }
+        // محاكاة استقرار الاتصال
+        function simulateConnectionStability() {
+            const stabilityOptions = ['مستقر جداً', 'مستقر', 'متقلب', 'غير مستقر'];
+            const randomStability = stabilityOptions[Math.floor(Math.random() * stabilityOptions.length)];
             
-            // Prepare messages for API
-            const messages = conversationHistory
-                .slice(-10) // Limit context window
-                .map(msg => ({
-                    role: msg.role,
-                    content: msg.content
-                }));
+            connectionStability.textContent = randomStability;
             
-            // Prepare request payload
-            const payload = {
-                model: apiSettings.model,
-                messages: messages,
-                temperature: apiSettings.temperature,
-                max_tokens: 1000
-            };
-            
-            // Determine API endpoint
-            let apiUrl = 'https://api.openai.com/v1/chat/completions';
-            let apiKey = apiSettings.apiKey;
-            
-            if (apiSettings.apiProvider === 'custom' && apiSettings.customEndpoint) {
-                apiUrl = apiSettings.customEndpoint;
-                // For custom endpoints, API key might not be needed or could be handled differently
-            }
-            
-            // Make API request
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
-                },
-                body: JSON.stringify(payload)
-            });
-            
-            if (!response.ok) {
-                if (response.status === 401) {
-                    throw new Error('مفتاح API غير صالح. الرجاء التحقق من المفتاح وإعادة المحاولة.');
-                } else if (response.status === 429) {
-                    throw new Error('تم تجاوز الحد المسموح به للطلبات. الرجاء المحاولة لاحقاً.');
-                } else {
-                    throw new Error(`خطأ في API: ${response.status}`);
-                }
-            }
-            
-            const data = await response.json();
-            
-            if (data.choices && data.choices.length > 0) {
-                return data.choices[0].message.content;
+            if (randomStability === 'مستقر جداً') {
+                connectionStability.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-safe';
+                connectionStability.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-check"></i>';
+            } else if (randomStability === 'غير مستقر') {
+                connectionStability.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-danger';
+                connectionStability.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-times"></i>';
             } else {
-                throw new Error('استجابة غير صالحة من API');
+                connectionStability.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-warning';
+                connectionStability.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+            }
+            
+            return randomStability;
+        }
+
+        // الحصول على عنوان IP (محاكاة)
+        function getIPAddress() {
+            // في التطبيق الحقيقي، يمكن استخدام خدمة API لمعرفة IP المستخدم
+            // هنا نقوم بمحاكاة العنوان
+            const fakeIP = `192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
+            ipAddress.textContent = fakeIP;
+            return fakeIP;
+        }
+
+        // اكتشاف معلومات المتصفح
+        function detectBrowser() {
+            const userAgent = navigator.userAgent;
+            let browserName = "متصفح غير معروف";
+            let browserVersion = "غير معروف";
+            
+            if (userAgent.includes("Chrome") && !userAgent.includes("Edg")) {
+                browserName = "Google Chrome";
+                browserVersion = userAgent.match(/Chrome\/(\d+)/)[1];
+            } else if (userAgent.includes("Firefox")) {
+                browserName = "Mozilla Firefox";
+                browserVersion = userAgent.match(/Firefox\/(\d+)/)[1];
+            } else if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) {
+                browserName = "Apple Safari";
+                browserVersion = userAgent.match(/Version\/(\d+)/)[1];
+            } else if (userAgent.includes("Edg")) {
+                browserName = "Microsoft Edge";
+                browserVersion = userAgent.match(/Edg\/(\d+)/)[1];
+            }
+            
+            document.getElementById('browser-name').textContent = browserName;
+            document.getElementById('browser-version').textContent = `الإصدار ${browserVersion}`;
+            
+            // تحديث حالة المتصفح بناءً على الإصدار
+            const versionNum = parseInt(browserVersion);
+            if (versionNum < 80 && (browserName.includes("Chrome") || browserName.includes("Firefox"))) {
+                browserStatus.textContent = "خطر";
+                browserStatus.className = "status status-danger";
+            } else if (versionNum < 100) {
+                browserStatus.textContent = "تحذير";
+                browserStatus.className = "status status-warning";
+            } else {
+                browserStatus.textContent = "آمن";
+                browserStatus.className = "status status-safe";
+            }
+            
+            return { name: browserName, version: browserVersion };
+        }
+
+        // فحص حالة الكوكيز
+        function checkCookies() {
+            const cookiesEnabled = navigator.cookieEnabled;
+            cookiesStatus.textContent = cookiesEnabled ? "مفعلة" : "معطلة";
+            
+            if (!cookiesEnabled) {
+                cookiesStatus.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-danger';
+                cookiesStatus.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-times"></i>';
+            }
+            
+            return cookiesEnabled;
+        }
+
+        // فحص JavaScript
+        function checkJavaScript() {
+            const jsEnabled = true; // بما أننا نستخدم JS، فهو مفعل بالتأكيد
+            javascriptStatus.textContent = jsEnabled ? "مفعل" : "معطل";
+            return jsEnabled;
+        }
+
+        // اكتشاف نظام التشغيل
+        function detectOS() {
+            const userAgent = navigator.userAgent;
+            let os = "نظام غير معروف";
+            
+            if (userAgent.includes("Win")) os = "Windows";
+            else if (userAgent.includes("Mac")) os = "macOS";
+            else if (userAgent.includes("Linux")) os = "Linux";
+            else if (userAgent.includes("Android")) os = "Android";
+            else if (userAgent.includes("iOS") || userAgent.includes("iPhone") || userAgent.includes("iPad")) os = "iOS";
+            
+            osType.textContent = os;
+            return os;
+        }
+
+        // اكتشاف دقة الشاشة
+        function detectScreenResolution() {
+            const width = window.screen.width;
+            const height = window.screen.height;
+            const resolution = `${width} × ${height}`;
+            
+            screenResolution.textContent = resolution;
+            
+            // تحسين للأجهزة المحمولة
+            if (width < 768) {
+                screenResolution.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-warning';
+                screenResolution.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+                screenResolution.textContent = `${resolution} (غير محسن للأجهزة المحمولة)`;
+            }
+            
+            return resolution;
+        }
+
+        // اكتشاف اللغة والوقت
+        function detectLanguageAndTime() {
+            const language = navigator.language || navigator.userLanguage;
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ar-SA');
+            
+            languageTime.textContent = `${language} | ${timezone} | ${timeString}`;
+            return { language, timezone, time: timeString };
+        }
+
+        // محاكاة حالة الذاكرة
+        function simulateMemoryStatus() {
+            const memoryOptions = ['منخفض', 'متوسط', 'جيد', 'ممتاز'];
+            const randomMemory = memoryOptions[Math.floor(Math.random() * memoryOptions.length)];
+            
+            memoryStatus.textContent = randomMemory;
+            
+            if (randomMemory === 'منخفض') {
+                memoryStatus.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-danger';
+                memoryStatus.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-times"></i>';
+            } else if (randomMemory === 'متوسط') {
+                memoryStatus.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-warning';
+                memoryStatus.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+            } else {
+                memoryStatus.parentElement.parentElement.querySelector('.check-icon').className = 'check-icon check-icon-safe';
+                memoryStatus.parentElement.parentElement.querySelector('.check-icon').innerHTML = '<i class="fas fa-check"></i>';
+            }
+            
+            return randomMemory;
+        }
+
+        // تحديث حالة الجهاز
+        function updateDeviceStatus() {
+            const screenRes = detectScreenResolution();
+            const memoryStatus = simulateMemoryStatus();
+            
+            if (memoryStatus === 'منخفض' || screenRes.includes("غير محسن")) {
+                deviceStatus.textContent = "تحذير";
+                deviceStatus.className = "status status-warning";
+            } else {
+                deviceStatus.textContent = "آمن";
+                deviceStatus.className = "status status-safe";
             }
         }
 
-        // Add message to UI
-        function addMessageToUI(role, content, messageId) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${role}`;
-            messageDiv.id = `message-${messageId}`;
+        // تحديث حالة الاتصال
+        function updateConnectionStatus() {
+            const speed = simulateConnectionSpeed();
+            const stability = simulateConnectionStability();
             
-            const avatar = role === 'user' 
-                ? '<i class="fas fa-user"></i>' 
-                : '<i class="fas fa-robot"></i>';
+            if (speed === 'بطيء' || stability === 'غير مستقر') {
+                connectionStatus.textContent = "خطر";
+                connectionStatus.className = "status status-danger";
+            } else if (speed === 'متوسط' || stability === 'متقلب') {
+                connectionStatus.textContent = "تحذير";
+                connectionStatus.className = "status status-warning";
+            } else {
+                connectionStatus.textContent = "آمن";
+                connectionStatus.className = "status status-safe";
+            }
             
-            // Format content with basic markdown-like styling
-            let formattedContent = content
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/`([^`]+)`/g, '<code>$1</code>')
-                .replace(/\n/g, '<br>');
+            // تحديث شريط التقدم
+            let progressValue = 100;
+            if (speed === 'بطيء') progressValue = 30;
+            else if (speed === 'متوسط') progressValue = 60;
+            else if (speed === 'جيد') progressValue = 80;
             
-            // Handle code blocks
-            formattedContent = formattedContent.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
-                return `<pre><code>${code}</code></pre>`;
-            });
-            
-            messageDiv.innerHTML = `
-                <div class="avatar">${avatar}</div>
-                <div class="message-content">${formattedContent}</div>
+            connectionProgress.style.width = `${progressValue}%`;
+        }
+
+        // تحديث النتائج التفصيلية
+        function updateDetailedResults() {
+            const connectionInfo = `
+                سرعة الاتصال: ${connectionSpeed.textContent}<br>
+                استقرار الاتصال: ${connectionStability.textContent}<br>
+                عنوان IP: ${ipAddress.textContent}<br>
+                جودة الاتصال: ${connectionStatus.textContent}
             `;
             
-            messagesContainer.appendChild(messageDiv);
-            
-            // Hide welcome screen if visible
-            if (welcomeScreen.style.display !== 'none') {
-                welcomeScreen.style.display = 'none';
-            }
-        }
-
-        // Show typing indicator
-        function showTypingIndicator() {
-            const typingDiv = document.createElement('div');
-            typingDiv.className = 'message assistant';
-            typingDiv.id = 'typing-indicator';
-            
-            typingDiv.innerHTML = `
-                <div class="avatar"><i class="fas fa-robot"></i></div>
-                <div class="message-content">
-                    <div class="typing-indicator">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </div>
+            const browserInfo = `
+                المتصفح: ${browserName.textContent}<br>
+                الإصدار: ${browserVersion.textContent}<br>
+                الكوكيز: ${cookiesStatus.textContent}<br>
+                JavaScript: ${javascriptStatus.textContent}<br>
+                حالة الأمان: ${browserStatus.textContent}
             `;
             
-            messagesContainer.appendChild(typingDiv);
-            scrollToBottom();
+            const deviceInfo = `
+                نظام التشغيل: ${osType.textContent}<br>
+                دقة الشاشة: ${screenResolution.textContent}<br>
+                اللغة والوقت: ${languageTime.textContent}<br>
+                حالة الذاكرة: ${memoryStatus.textContent}<br>
+                حالة الجهاز: ${deviceStatus.textContent}
+            `;
+            
+            const securityInfo = `
+                اتصال آمن (HTTPS): ${window.location.protocol === 'https:' ? 'نعم' : 'لا'}<br>
+                التشفير المدعوم: TLS 1.2+<br>
+                حماية من التتبع: جزئية<br>
+                صلاحيات الموقع: محدودة<br>
+                إعدادات الخصوصية: ${Math.random() > 0.5 ? 'جيدة' : 'تحتاج تحسين'}
+            `;
+            
+            const networkInfo = `
+                نوع الاتصال: ${navigator.connection ? navigator.connection.effectiveType : 'غير معروف'}<br>
+                سرعة التنزيل المقدرة: ${Math.floor(Math.random() * 50) + 5} Mbps<br>
+                سرعة الرفع المقدرة: ${Math.floor(Math.random() * 20) + 2} Mbps<br>
+                وقت الاستجابة: ${Math.floor(Math.random() * 200) + 20}ms<br>
+                مزود الخدمة: ${Math.random() > 0.5 ? 'محلي' : 'دولي'}
+            `;
+            
+            const performanceInfo = `
+                وقت تحميل الصفحة: ${Math.floor(Math.random() * 3000) + 500}ms<br>
+                استخدام الذاكرة: ${Math.floor(Math.random() * 80) + 10}%<br>
+                استخدام المعالج: ${Math.floor(Math.random() * 60) + 5}%<br>
+                أداء الرسومات: ${Math.random() > 0.5 ? 'جيد' : 'متوسط'}<br>
+                التخزين المؤقت: ${Math.random() > 0.5 ? 'مفعل' : 'معطل'}
+            `;
+            
+            detailedConnection.innerHTML = connectionInfo;
+            detailedBrowser.innerHTML = browserInfo;
+            detailedDevice.innerHTML = deviceInfo;
+            detailedSecurity.innerHTML = securityInfo;
+            detailedNetwork.innerHTML = networkInfo;
+            detailedPerformance.innerHTML = performanceInfo;
         }
 
-        // Remove typing indicator
-        function removeTypingIndicator() {
-            const typingIndicator = document.getElementById('typing-indicator');
-            if (typingIndicator) {
-                typingIndicator.remove();
+        // بدء الفحص الشامل
+        function startComprehensiveScan() {
+            // إعادة تعيين الحالة
+            startScanBtn.disabled = true;
+            startScanBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الفحص...';
+            
+            // محاكاة عملية الفحص مع تأخيرات
+            setTimeout(() => {
+                // فحص الاتصال
+                updateConnectionStatus();
+                getIPAddress();
+                
+                // فحص المتصفح
+                detectBrowser();
+                checkCookies();
+                checkJavaScript();
+                
+                // فحص الجهاز
+                detectOS();
+                detectScreenResolution();
+                detectLanguageAndTime();
+                updateDeviceStatus();
+                
+                // تحديث النتائج التفصيلية
+                updateDetailedResults();
+                
+                // إعادة تعيين الزر
+                startScanBtn.disabled = false;
+                startScanBtn.innerHTML = '<i class="fas fa-redo"></i> إعادة الفحص';
+                
+                // عرض رسالة نجاح
+                showNotification('تم الفحص الشامل بنجاح!', 'success');
+            }, 2000);
+        }
+
+        // عرض إشعار
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                right: 20px;
+                padding: 15px;
+                border-radius: var(--border-radius);
+                color: white;
+                font-weight: bold;
+                text-align: center;
+                box-shadow: var(--box-shadow);
+                z-index: 1000;
+                animation: slideIn 0.5s ease;
+            `;
+            
+            if (type === 'success') {
+                notification.style.backgroundColor = 'var(--success-color)';
+            } else if (type === 'warning') {
+                notification.style.backgroundColor = 'var(--warning-color)';
+            } else if (type === 'error') {
+                notification.style.backgroundColor = 'var(--danger-color)';
+            } else {
+                notification.style.backgroundColor = 'var(--secondary-color)';
             }
+            
+            notification.innerHTML = `
+                ${message}
+                <button onclick="this.parentElement.remove()" style="background: transparent; border: none; color: white; font-size: 1.2rem; position: absolute; left: 10px; top: 10px; cursor: pointer;">×</button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
         }
 
-        // Scroll to bottom of messages
-        function scrollToBottom() {
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        // تهيئة التطبيق
+        function initApp() {
+            // إجراء الفحص الأولي
+            updateConnectionStatus();
+            getIPAddress();
+            detectBrowser();
+            checkCookies();
+            checkJavaScript();
+            detectOS();
+            detectScreenResolution();
+            detectLanguageAndTime();
+            updateDeviceStatus();
+            simulateMemoryStatus();
+            updateDetailedResults();
+            
+            // إضافة مستمعي الأحداث
+            startScanBtn.addEventListener('click', startComprehensiveScan);
+            
+            showDetailsBtn.addEventListener('click', () => {
+                detailedResults.classList.toggle('active');
+                showDetailsBtn.innerHTML = detailedResults.classList.contains('active') 
+                    ? '<i class="fas fa-eye-slash"></i> إخفاء التفاصيل' 
+                    : '<i class="fas fa-chart-bar"></i> عرض التفاصيل الكاملة';
+            });
+            
+            // إضافة رسالة ترحيب
+            setTimeout(() => {
+                showNotification('مرحباً! تم تحميل نظام الفحص الأمني الشامل. اضغط على "بدء الفحص الشامل" لفحص نظامك.', 'info');
+            }, 1000);
         }
 
-        // Initialize the app
-        document.addEventListener('DOMContentLoaded', init);
+        // بدء التطبيق عند تحميل الصفحة
+        window.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
 </html>
